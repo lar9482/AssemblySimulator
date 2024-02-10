@@ -15,13 +15,13 @@ public class Lexer {
     public Lexer() {
         this.matchIdentifier = new Regex(@"\b^[a-zA-Z]{1}[a-zA-Z0-9_]*\b");
         this.matchWhitespace = new Regex(@"\b^\n|\t|\s|\r\b");
-        this.matchOneSymbol = new Regex(@"^[,:]");
+        this.matchOneSymbol = new Regex(@"^[,:\[\]]");
         this.matchIntegers = new Regex(@"^-?\b\d+\b");
         this.lineCounter = 1;
     }
 
-    public List<Token> lexProgram(string programText) {
-        List<Token> tokens = new List<Token>();
+    public Queue<Token> lexProgram(string programText) {
+        Queue<Token> tokens = new Queue<Token>();
         while (programText.Length > 0) {
             Tuple<string, string> longestMatchWithType = scanLongestMatch(programText);
             string matchedLexeme = longestMatchWithType.Item1;
@@ -29,13 +29,13 @@ public class Lexer {
 
             switch(matchType) {
                 case "matchIdentifier":
-                    tokens.Add(resolveWordLexeme(matchedLexeme));
+                    tokens.Enqueue(resolveWordLexeme(matchedLexeme));
                     break;
                 case "matchOneSymbol":
-                    tokens.Add(resolveOneSymbolLexeme(matchedLexeme));
+                    tokens.Enqueue(resolveOneSymbolLexeme(matchedLexeme));
                     break;
                 case "matchIntegers":
-                    tokens.Add(
+                    tokens.Enqueue(
                         new Token(matchedLexeme, lineCounter, TokenType.integer)
                     );
                     break;
@@ -83,6 +83,10 @@ public class Lexer {
                 return new Token(lexeme, lineCounter, TokenType.comma);
             case ":":
                 return new Token(lexeme, lineCounter, TokenType.colon);
+            case "[":
+                return new Token(lexeme, lineCounter, TokenType.startBracket);
+            case "]":
+                return new Token(lexeme, lineCounter, TokenType.endBracket);
             default:
                 throw new Exception(String.Format("The one symbol lexeme {0} is unrecognizable", lexeme));
         }

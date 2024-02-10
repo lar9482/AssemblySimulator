@@ -90,6 +90,52 @@ public class Lexer {
 
     private Token resolveWordLexeme(string lexeme) {
         switch(lexeme) {
+            case "rZERO":
+                return new Token(lexeme, lineCounter, TokenType.rZERO_Reg);
+            case "r1":
+                return new Token(lexeme, lineCounter, TokenType.r1_Reg);
+            case "r2":
+                return new Token(lexeme, lineCounter, TokenType.r2_Reg);
+            case "r3":
+                return new Token(lexeme, lineCounter, TokenType.r3_Reg);
+            case "r4":
+                return new Token(lexeme, lineCounter, TokenType.r4_Reg);
+            case "r5":
+                return new Token(lexeme, lineCounter, TokenType.r5_Reg);
+            case "r6":
+                return new Token(lexeme, lineCounter, TokenType.r6_Reg);
+            case "r7":
+                return new Token(lexeme, lineCounter, TokenType.r7_Reg);
+            case "r8":
+                return new Token(lexeme, lineCounter, TokenType.r8_Reg);
+            case "r9":
+                return new Token(lexeme, lineCounter, TokenType.r9_Reg);
+            case "r10":
+                return new Token(lexeme, lineCounter, TokenType.r10_Reg);
+            case "r11":
+                return new Token(lexeme, lineCounter, TokenType.r11_Reg);
+            case "r12":
+                return new Token(lexeme, lineCounter, TokenType.r12_Reg);
+            case "r13":
+                return new Token(lexeme, lineCounter, TokenType.r13_Reg);
+            case "r14":
+                return new Token(lexeme, lineCounter, TokenType.r14_Reg);
+            case "r15":
+                return new Token(lexeme, lineCounter, TokenType.r15_Reg);
+            case "r16":
+                return new Token(lexeme, lineCounter, TokenType.r16_Reg);
+            case "rSP":
+                return new Token(lexeme, lineCounter, TokenType.rSP_Reg); 
+            case "rFP":
+                return new Token(lexeme, lineCounter, TokenType.rFP_Reg);   
+            case "rPC":
+                return new Token(lexeme, lineCounter, TokenType.rPC_Reg); 
+            case "rRET":
+                return new Token(lexeme, lineCounter, TokenType.rRET_Reg); 
+            case "rHI":
+                return new Token(lexeme, lineCounter, TokenType.rHI_Reg); 
+            case "rLO":
+                return new Token(lexeme, lineCounter, TokenType.rLO_Reg); 
             default:
                 return new Token(lexeme, lineCounter, TokenType.identifier);
         }

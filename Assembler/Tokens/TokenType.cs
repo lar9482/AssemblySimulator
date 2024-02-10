@@ -22,6 +22,7 @@ public enum TokenType {
     rSP_Reg, //Stack pointer register
     rFP_Reg, //Frame pointer register 
     rPC_Reg, //Program counter register    
+    rRET_Reg, //Return pointer register
     rHI_Reg, //Holds truncated result from division
     rLO_Reg, //Holds remainder from truncated result
 
@@ -70,7 +71,7 @@ public enum TokenType {
 
     identifier,
     integer,
-    
+
     //Symbols that will appear in the language
     comma,
     colon,

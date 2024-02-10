@@ -57,7 +57,7 @@ public enum TokenType {
     bLez_Inst,
     bNe_Inst,
 
-    //Jump instructions (opcode label:) (opcode reg)
+    //Jump instructions (opcode label:) or (opcode reg)
     jmp_Inst,
     jmpL_Inst,
     jmpL_Reg_Inst,

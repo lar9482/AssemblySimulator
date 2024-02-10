@@ -67,4 +67,11 @@ public enum TokenType {
     lw_Inst,
     sb_Inst,
     sw_Inst,
+
+    identifier,
+    integer,
+    
+    //Symbols that will appear in the language
+    comma,
+    colon,
 }

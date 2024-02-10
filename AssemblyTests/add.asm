@@ -1,2 +1,2 @@
-addi r1, 100
+addi r1, -100
 add r2, r1

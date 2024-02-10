@@ -75,4 +75,6 @@ public enum TokenType {
     //Symbols that will appear in the language
     comma,
     colon,
+    startBracket,
+    endBracket
 }

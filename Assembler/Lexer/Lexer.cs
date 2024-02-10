@@ -136,6 +136,72 @@ public class Lexer {
                 return new Token(lexeme, lineCounter, TokenType.rHI_Reg); 
             case "rLO":
                 return new Token(lexeme, lineCounter, TokenType.rLO_Reg); 
+            case "mov":
+                return new Token(lexeme, lineCounter, TokenType.mov_Inst);
+            case "add":
+                return new Token(lexeme, lineCounter, TokenType.add_Inst);
+            case "sub":
+                return new Token(lexeme, lineCounter, TokenType.sub_Inst);
+            case "mult":
+                return new Token(lexeme, lineCounter, TokenType.mult_Inst);
+            case "div":
+                return new Token(lexeme, lineCounter, TokenType.div_Inst);
+            case "and":
+                return new Token(lexeme, lineCounter, TokenType.and_Inst);
+            case "or":
+                return new Token(lexeme, lineCounter, TokenType.or_Inst);
+            case "xor":
+                return new Token(lexeme, lineCounter, TokenType.xor_Inst);    
+            case "not":
+                return new Token(lexeme, lineCounter, TokenType.not_Inst);
+            case "nor":
+                return new Token(lexeme, lineCounter, TokenType.nor_Inst);
+            case "sllv":
+                return new Token(lexeme, lineCounter, TokenType.sllv_Inst);
+            case "srav":
+                return new Token(lexeme, lineCounter, TokenType.srav_Inst);
+            case "addI":
+                return new Token(lexeme, lineCounter, TokenType.addI_Inst);
+            case "subI":
+                return new Token(lexeme, lineCounter, TokenType.subI_Inst);
+            case "multI":
+                return new Token(lexeme, lineCounter, TokenType.multI_Inst);
+            case "divI":
+                return new Token(lexeme, lineCounter, TokenType.divI_Inst);
+            case "andI":
+                return new Token(lexeme, lineCounter, TokenType.andI_Inst);
+            case "orI":
+                return new Token(lexeme, lineCounter, TokenType.orI_Inst);
+            case "xorI":
+                return new Token(lexeme, lineCounter, TokenType.xorI_Inst);
+            case "sll":
+                return new Token(lexeme, lineCounter, TokenType.sll_Inst);
+            case "sra":
+                return new Token(lexeme, lineCounter, TokenType.sra_Inst);
+            case "bEq":
+                return new Token(lexeme, lineCounter, TokenType.bEq_Inst);
+            case "bGtz":
+                return new Token(lexeme, lineCounter, TokenType.bGtz_Inst);
+            case "bLez":
+                return new Token(lexeme, lineCounter, TokenType.bLez_Inst);
+            case "bNe":
+                return new Token(lexeme, lineCounter, TokenType.bNe_Inst);
+            case "jmp":
+                return new Token(lexeme, lineCounter, TokenType.jmp_Inst);
+            case "jmpL":
+                return new Token(lexeme, lineCounter, TokenType.jmpL_Inst);
+            case "jmpL_Reg":
+                return new Token(lexeme, lineCounter, TokenType.jmpL_Reg_Inst);
+            case "jmpRet":
+                return new Token(lexeme, lineCounter, TokenType.jmpRet_Inst);
+            case "lb":
+                return new Token(lexeme, lineCounter, TokenType.lb_Inst);
+            case "lw":
+                return new Token(lexeme, lineCounter, TokenType.lw_Inst);
+            case "sb":
+                return new Token(lexeme, lineCounter, TokenType.sb_Inst);
+            case "sw":
+                return new Token(lexeme, lineCounter, TokenType.sw_Inst);
             default:
                 return new Token(lexeme, lineCounter, TokenType.identifier);
         }

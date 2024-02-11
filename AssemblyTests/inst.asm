@@ -28,5 +28,5 @@ sw r11, 0[r2]
 jmp unconditionalJump
 unconditionalJump:
 
-bLez rZero, zeroJump
+bLez rZERO, zeroJump
 zeroJump:

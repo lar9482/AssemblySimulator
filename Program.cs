@@ -1,3 +1,3 @@
 ﻿using Compiler.Assembler;
 
-Assembler.assembleFile("./AssemblyTests/add.asm");
+Assembler.assembleFile("./AssemblyTests/inst.asm");

@@ -41,6 +41,7 @@ public enum TokenType {
     srav_Inst,
 
     //Immediate instructions(opcode reg, integer)
+    movI_Inst,
     addI_Inst,
     subI_Inst,
     multI_Inst,

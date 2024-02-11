@@ -40,9 +40,8 @@ public class Lexer {
                     );
                     break;
                 case "matchWhitespace":
-                    if (matchedLexeme == "\n") {
+                    if (matchedLexeme == "\n")
                         lineCounter++;
-                    }
                     break;
                 default:
                     throw new InvalidOperationException(
@@ -164,6 +163,8 @@ public class Lexer {
                 return new Token(lexeme, lineCounter, TokenType.sllv_Inst);
             case "srav":
                 return new Token(lexeme, lineCounter, TokenType.srav_Inst);
+            case "movI":
+                return new Token(lexeme, lineCounter, TokenType.movI_Inst);
             case "addI":
                 return new Token(lexeme, lineCounter, TokenType.addI_Inst);
             case "subI":

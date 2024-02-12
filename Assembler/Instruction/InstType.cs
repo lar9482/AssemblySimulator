@@ -2,7 +2,9 @@ namespace Compiler.Assembler.Instruction;
 
 public enum InstType {
     RegInst,
-    JmpInst,
+    JmpRegInst,
+    JmpLabelInst,
+    JmpBranchInst,
     ImmInst,
     MemInst,
     LabelInst

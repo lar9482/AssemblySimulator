@@ -2,8 +2,8 @@ using System.IO;
 using System.Collections;
 
 using Compiler.Assembler.Tokens;
-using Compiler.Assembler.LexicalAnalysis;
-
+using Compiler.Assembler.Lex;
+using Compiler.Assembler.Parse;
 namespace Compiler.Assembler;
 
 public class Assembler {
@@ -17,5 +17,7 @@ public class Assembler {
     private static void assemble(string content) {
         Lexer lexer = new Lexer();
         Queue<Token> tokens = lexer.lexProgram(content);
+
+        Parser parser = new Parser(tokens);
     }
 }

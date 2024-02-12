@@ -59,10 +59,10 @@ public enum TokenType {
     bNe_Inst,
 
     //Jump instructions (opcode label:) or (opcode reg)
-    jmp_Inst,
-    jmpL_Inst,
-    jmpL_Reg_Inst,
-    jmpRet_Inst,
+    jmp_Inst, //(opcode label)
+    jmpL_Inst, // (opcode label)
+    jmpL_Reg_Inst, //(opcode reg)
+    jmpRet_Inst, // (opcode reg)
 
     //Memory instructions (opcode reg, reg(integer))
     lb_Inst,

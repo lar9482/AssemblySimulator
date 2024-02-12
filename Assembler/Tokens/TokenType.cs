@@ -77,5 +77,6 @@ public enum TokenType {
     comma,
     colon,
     startBracket,
-    endBracket
+    endBracket,
+    EOF
 }

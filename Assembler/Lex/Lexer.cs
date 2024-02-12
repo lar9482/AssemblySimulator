@@ -51,6 +51,8 @@ public class Lexer {
             programText = programText.Remove(0, matchedLexeme.Length);
         }
 
+        //This EOF token will ensure that the parser can determine when to terminate
+        tokens.Enqueue(new Token("EOF",  lineCounter+1, TokenType.EOF));
         return tokens;
     }
 

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 
 using Compiler.Assembler.Tokens;
 using Compiler.Assembler.Instruction;
+using System.Reflection.Emit;
 
 namespace Compiler.Assembler.Parse;
 
@@ -51,6 +52,21 @@ public class Parser {
             case TokenType.sb_Inst:
             case TokenType.sw_Inst:
                 instructions.Add(parseMemInst());
+                break;
+            case TokenType.jmpL_Reg_Inst:
+            case TokenType.jmpRet_Inst:
+                instructions.Add(parseJmpRegInst());
+                break;
+            case TokenType.jmp_Inst:
+            case TokenType.jmpL_Inst:
+                instructions.Add(parseJmpLabelInst());
+                break;
+            case TokenType.bEq_Inst:
+            case TokenType.bNe_Inst:
+                instructions.Add(parseJmpBranchInst());
+                break;
+            case TokenType.identifier:
+                instructions.Add(parseLabelInst());
                 break;
             case TokenType.EOF:
                 return instructions;
@@ -110,6 +126,51 @@ public class Parser {
         );
     }
 
+    private JmpRegInst parseJmpRegInst() {
+        Token opcodeToken = consume(tokenQueue.Peek().type);
+        Token regToken = parseRegister();
+
+        return new JmpRegInst(
+            regToken.lexeme, opcodeToken.lexeme, InstType.JmpRegInst
+        );
+    }
+
+    private JmpLabelInst parseJmpLabelInst() {
+        Token opcodeToken = consume(tokenQueue.Peek().type);
+        Token labelToken = consume(TokenType.identifier);
+
+        return new JmpLabelInst(
+            labelToken.lexeme, opcodeToken.lexeme, InstType.JmpRegInst
+        );
+    }
+
+    private JmpBranchInst parseJmpBranchInst() {
+        Token opcodeToken = consume(tokenQueue.Peek().type);
+        Token reg1Token = parseRegister();
+        consume(TokenType.comma);
+        Token reg2Token = parseRegister();
+        consume(TokenType.comma);
+        Token labelToken = consume(TokenType.identifier);
+
+        return new JmpBranchInst(
+            reg1Token.lexeme,
+            reg2Token.lexeme,
+            labelToken.lexeme,
+            opcodeToken.lexeme,
+            InstType.JmpBranchInst
+        );
+    }
+
+    private LabelInst parseLabelInst() {
+        Token labelToken = consume(TokenType.identifier);
+        consume(TokenType.colon);
+
+        return new LabelInst(
+            labelToken.lexeme,
+            InstType.LabelInst
+        );
+    }
+
     private Token parseRegister() {
         switch(tokenQueue.Peek().type) {
             case TokenType.rZERO_Reg:
@@ -149,8 +210,8 @@ public class Parser {
         if (expectedToken.type == currTokenType) {
             return tokenQueue.Dequeue();
         } else {
-            throw new Exception(String.Format("{0} does not match with the expected token {1}", 
-                currTokenType.ToString(), expectedToken.type.ToString()
+            throw new Exception(String.Format("Line {0}: {1} does not match with the expected token {2}", 
+                expectedToken.lineCount.ToString(), currTokenType.ToString(), expectedToken.type.ToString()
             ));
         }
     }

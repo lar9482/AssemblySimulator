@@ -187,10 +187,6 @@ public class Lexer {
                 return new Token(lexeme, lineCounter, TokenType.sra_Inst);
             case "bEq":
                 return new Token(lexeme, lineCounter, TokenType.bEq_Inst);
-            case "bGtz":
-                return new Token(lexeme, lineCounter, TokenType.bGtz_Inst);
-            case "bLez":
-                return new Token(lexeme, lineCounter, TokenType.bLez_Inst);
             case "bNe":
                 return new Token(lexeme, lineCounter, TokenType.bNe_Inst);
             case "jmp":

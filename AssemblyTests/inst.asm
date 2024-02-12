@@ -24,3 +24,12 @@ lb r10, 0[r1]
 lw r11, 0[r2]
 sb r10, 0[r1]
 sw r11, 0[r2]
+
+jmpRet r1
+jmpL_Reg r1
+
+jmp unconditionalJump
+unconditionalJump:
+
+bEq rZERO, r1, zeroJump
+zeroJump:

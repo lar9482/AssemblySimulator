@@ -54,8 +54,6 @@ public enum TokenType {
     
     //Jump instructions with registers and labels(opcode reg, reg, label)
     bEq_Inst, 
-    bGtz_Inst,
-    bLez_Inst,
     bNe_Inst,
 
     //Jump instructions (opcode label:) or (opcode reg)

@@ -46,6 +46,12 @@ public class Parser {
             case TokenType.sra_Inst:
                 instructions.Add(parseImmInst());
                 break;
+            case TokenType.lb_Inst:
+            case TokenType.lw_Inst:
+            case TokenType.sb_Inst:
+            case TokenType.sw_Inst:
+                instructions.Add(parseMemInst());
+                break;
             case TokenType.EOF:
                 return instructions;
             default:
@@ -83,6 +89,24 @@ public class Parser {
             Int32.Parse(integerToken.lexeme),
             opcodeToken.lexeme,
             InstType.ImmInst
+        );
+    }
+
+    private MemInst parseMemInst() {
+        Token opcodeToken = consume(tokenQueue.Peek().type);
+        Token regToken = parseRegister();
+        consume(TokenType.comma);
+        Token offsetToken = consume(TokenType.integer);
+        consume(TokenType.startBracket);
+        Token memRegToken = parseRegister();
+        consume(TokenType.endBracket);
+
+        return new MemInst(
+            regToken.lexeme,
+            memRegToken.lexeme,
+            Int32.Parse(offsetToken.lexeme),
+            opcodeToken.lexeme,
+            InstType.MemInst
         );
     }
 

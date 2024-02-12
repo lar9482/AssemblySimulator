@@ -6,14 +6,14 @@ using Compiler.Assembler.Instruction.AssembledInst;
 namespace Compiler.Assembler.Instruction;
 
 public class MemInst : Inst {
-    private string reg1;
-    private string reg2;
+    private string reg;
+    private string memReg;
     private int offset;
 
-    public MemInst(string reg1, string reg2, int offset, string instName, InstType type) 
+    public MemInst(string reg, string memReg, int offset, string instName, InstType type) 
     : base(instName, type) {
-        this.reg1 = reg1;
-        this.reg2 = reg2;
+        this.reg = reg;
+        this.memReg = memReg;
         this.offset = offset;
     }
     

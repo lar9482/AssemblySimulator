@@ -6,9 +6,9 @@ using Compiler.Assembler.Instruction.AssembledInst;
 namespace Compiler.Assembler.Instruction;
 
 public class MemInst : Inst {
-    private string reg;
-    private string memReg;
-    private int offset;
+    public string reg { get; }
+    public string memReg { get; }
+    public int offset { get; }
 
     public MemInst(string reg, string memReg, int offset, string instName, InstType type) 
     : base(instName, type) {

@@ -50,6 +50,11 @@ public class Assembler {
                     );
                     break;
                 case "MemInst":
+                    assembledInstructions.Add(
+                        assembleMemInst(
+                            (MemInst) instruction
+                        )
+                    );
                     break;
                 case "JmpRegInst":
                     break;
@@ -98,18 +103,16 @@ public class Assembler {
         int bin = opcodeBin << 26;
         bin += reg1Bin << 21;
         bin += reg2Bin << 16;
-
-        string hexString = bin.ToString("X8");
-        return hexString;
+        return bin.ToString("X8");
     }
-    
+
     /*
      * Target format:
      * ooooooss sssdiiii iiiiiiii iiiiiiii
      *
      * o: opcode binary
      * s: reg binary
-     * d: sign of the immediate. 0 is negative. 1 is positive
+     * d: sign of the immediate. 1 is negative. 0 is positive
      * i: The immediate number binary. Represented as a two's complement.
      */
     private string assembleImmInst(ImmInst instruction) {
@@ -127,7 +130,7 @@ public class Assembler {
         int immBin;
         if (instruction.integer < 0) {
             signBin = 1;
-            immBin = ~(instruction.integer)+1;
+            immBin = ~instruction.integer+1;
         } else {
             signBin = 0;
             immBin = instruction.integer;
@@ -136,8 +139,46 @@ public class Assembler {
         bin += regBin << 21;
         bin += signBin << 20;
         bin += immBin;
-        string hexString = bin.ToString("X8");
-        return hexString;
+        
+        return bin.ToString("X8");
+    }
+
+    /*
+     * Target format:
+     * ooooooss sssttttt diiiiiii iiiiiiii
+     *
+     * o: opcode binary
+     * s: reg binary
+     * t: memReg binary
+     * d: sign of the offset. 1 is negative. 0 is positive
+     * i: The offset number binary. Represented as a two's complement.
+     */
+    private string assembleMemInst(MemInst instruction) {
+        //These numbers define the bounds of a number that can fit in 15 binary digits,
+        //which is the allocated space for an immmediate number
+        if (instruction.offset > 32767 || instruction.offset < -32767) {
+            throw new Exception("Invalid memory instruction. Offset must be inbetween 32767 and -32767");
+        }
+
+        int opcodeBin = assembleOpcode(instruction.instName);
+        int regBin = assembleRegister(instruction.reg);
+        int memRegBin = assembleRegister(instruction.memReg);
+        int signBin;
+        int offsetBin;
+        if (instruction.offset < 0) {
+            signBin = 1;
+            offsetBin = ~instruction.offset+1;
+        } else {
+            signBin = 0;
+            offsetBin = instruction.offset;
+        }
+        int bin = opcodeBin << 26;
+        bin += regBin << 21;
+        bin += memRegBin << 16;
+        bin += signBin << 15;
+        bin += offsetBin;
+
+        return bin.ToString("X8");;
     }
 
     private string assembleLabelInst(LabelInst instruction) {
@@ -192,7 +233,7 @@ public class Assembler {
             case "movI": return 12;
             case "addI": return 13;
             case "subI": return 14;
-            case "mulI": return 15;
+            case "multI": return 15;
             case "divI": return 16;
             case "andI": return 17;
             case "orI": return 18;

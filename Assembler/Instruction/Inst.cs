@@ -3,7 +3,7 @@ using Compiler.Assembler.Instruction.AssembledInst;
 namespace Compiler.Assembler.Instruction;
 
 public abstract class Inst {
-    private string instName;
+    public string instName { get; }
     private InstType type;
 
     public Inst(string instName, InstType type) {

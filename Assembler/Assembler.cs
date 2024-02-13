@@ -5,6 +5,7 @@ using Compiler.Assembler.Tokens;
 using Compiler.Assembler.Lex;
 using Compiler.Assembler.Parse;
 using Compiler.Assembler.Instruction;
+using System.Data;
 namespace Compiler.Assembler;
 
 public class Assembler {
@@ -26,8 +27,6 @@ public class Assembler {
 
         List<string> assembledInstructions = new List<string>();
         foreach (Inst instruction in instructions) {
-            var test = instruction.GetType().Name;
-            Console.WriteLine();
             switch (instruction.GetType().Name) {
                 case "LabelInst":
                     assembledInstructions.Add(
@@ -44,6 +43,11 @@ public class Assembler {
                     );
                     break;
                 case "ImmInst":
+                    assembledInstructions.Add(
+                        assembleImmInst(
+                            (ImmInst) instruction
+                        )
+                    );
                     break;
                 case "MemInst":
                     break;
@@ -78,31 +82,62 @@ public class Assembler {
     }
 
     /*
-    * Target format:
-    * ooooooss sssttttt aaaaaaaa aaaaaaaa
-    *
-    * o: opcode binary
-    * s: reg1 binary
-    * t: reg2 binary
-    * a: placeholder zeros.
-    */
+     * Target format:
+     * ooooooss sssttttt aaaaaaaa aaaaaaaa
+     *
+     * o: opcode binary
+     * s: reg1 binary
+     * t: reg2 binary
+     * a: placeholder zeros.
+     */
     private string assembleRegInst(RegInst instruction) {
         int opcodeBin = assembleOpcode(instruction.instName);
         int reg1Bin = assembleRegister(instruction.reg1);
         int reg2Bin = assembleRegister(instruction.reg2);
 
         int bin = opcodeBin << 26;
-        bin += (reg1Bin << 21);
-        bin += (reg2Bin << 16);
+        bin += reg1Bin << 21;
+        bin += reg2Bin << 16;
 
         string hexString = bin.ToString("X8");
         return hexString;
     }
-    /**
-    */
-
+    
+    /*
+     * Target format:
+     * ooooooss sssdiiii iiiiiiii iiiiiiii
+     *
+     * o: opcode binary
+     * s: reg binary
+     * d: sign of the immediate. 0 is negative. 1 is positive
+     * i: The immediate number binary. Represented as a two's complement.
+     */
     private string assembleImmInst(ImmInst instruction) {
-        return "";
+        //These numbers define the bounds of a number that can fit in 20 binary digits,
+        //which is the allocated space for an immmediate number
+        if (instruction.integer > 1048575 || instruction.integer < -1048575) {
+            throw new Exception(String.Format(
+                "Invalid immediate instruction. It must inbetween 1048575 and -1048575"
+            ));
+        }
+
+        int opcodeBin = assembleOpcode(instruction.instName);
+        int regBin = assembleRegister(instruction.reg);
+        int signBin;
+        int immBin;
+        if (instruction.integer < 0) {
+            signBin = 1;
+            immBin = ~(instruction.integer)+1;
+        } else {
+            signBin = 0;
+            immBin = instruction.integer;
+        }
+        int bin = opcodeBin << 26;
+        bin += regBin << 21;
+        bin += signBin << 20;
+        bin += immBin;
+        string hexString = bin.ToString("X8");
+        return hexString;
     }
 
     private string assembleLabelInst(LabelInst instruction) {

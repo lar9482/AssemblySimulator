@@ -10,8 +10,9 @@ not r8, r8
 nor r9, r9
 sllv r10, r10
 srav r11, r11
-    
-movI r9, 1000
+
+movI r9, 1000 
+movI r9, -1000
 addI r1, 100
 subI r2, 100
 multI r3, 10

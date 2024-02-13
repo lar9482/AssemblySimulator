@@ -6,8 +6,8 @@ using Compiler.Assembler.Instruction.AssembledInst;
 namespace Compiler.Assembler.Instruction;
 
 public class ImmInst : Inst {
-    private string reg;
-    private int integer;
+    public string reg { get; }
+    public int integer { get; }
 
     public ImmInst(string reg, int integer, string instName, InstType type) 
     : base(instName, type) {

@@ -1,3 +1,4 @@
+main:
 mov r1, r2
 add r2, r2
 sub r3, r3

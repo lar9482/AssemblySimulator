@@ -72,7 +72,7 @@ public class Assembler {
                         )
                     );
                     break;
-                case "JmpBranch":
+                case "JmpBranchInst":
                     assembledInstructions.Add(
                         assembleJmpBranchInst(
                             (JmpBranchInst) instruction, i
@@ -83,6 +83,7 @@ public class Assembler {
                     throw new Exception("Unexpected instruction seen");
             }
         }
+        Console.WriteLine();
     }
 
     private List<Inst> parseProgram(string content) {

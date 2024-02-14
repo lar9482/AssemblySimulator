@@ -29,9 +29,10 @@ sw r11, 0[r2]
 
 jmp unconditionalJump
 addI r1, 100
+
 unconditionalJump:
 
-jmpRet r1
+jmpReg r1
 jmpL_Reg r1
 
 bEq rZERO, r1, zeroJump

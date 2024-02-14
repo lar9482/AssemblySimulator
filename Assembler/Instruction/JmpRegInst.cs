@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 namespace Compiler.Assembler.Instruction;
 
 public class JmpRegInst : Inst {
-    private string reg;
+    public string reg { get; }
 
     public JmpRegInst(string reg, string instName)
     : base(instName) {

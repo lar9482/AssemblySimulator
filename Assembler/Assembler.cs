@@ -59,6 +59,11 @@ public class Assembler {
                     );
                     break;
                 case "JmpRegInst":
+                    assembledInstructions.Add(
+                        assembleJmpRegInst(
+                            (JmpRegInst) instruction
+                        )
+                    );
                     break;
                 case "JmpLabelInst":
                     assembledInstructions.Add(
@@ -190,9 +195,10 @@ public class Assembler {
 
     /*
      * Target format:
-     * ooooooii iiiiiiii iiiiiiii iiiiiiii
+     * oooooodi iiiiiiii iiiiiiii iiiiiiii
      *
      * o: opcode binary
+     * d: sign of the offset. 1 is negative. 0 is positive
      * i: The jump number binary. Represented as a two's complement.
      */
     private string assembleJmpLabelInst(JmpLabelInst instruction, int place) {
@@ -202,12 +208,40 @@ public class Assembler {
         int labelAddress = labelAddresses[instruction.label];
         int jumpOffsetBin = (labelAddress - (currentAddress - 4)) >> 2;
 
-        if (jumpOffsetBin > 67108863 || jumpOffsetBin < -67108863) {
-            throw new Exception("Invalid jump instruction. jump offset must be inbetween 32767 and -32767");
+        //These numbers define the bounds of a number that can fit in 25 binary digits,
+        //which is the allocated space for an immmediate number
+        if (jumpOffsetBin > 33554431 || jumpOffsetBin < -33554431) {
+            throw new Exception("Invalid jump label instruction. jump offset must be inbetween 33554431 and -33554431");
+        }
+
+        int sign;
+        if (jumpOffsetBin < 0) {
+            sign = 1;
+            jumpOffsetBin = ~jumpOffsetBin+1;
+        } else {
+            sign = 0;
         }
         
         int bin = opcodeBin << 26;
+        bin += sign << 25;
         bin += jumpOffsetBin;
+        return bin.ToString("X8");
+    }
+
+    /*
+     * Target format:
+     * ooooooss sss00000 00000000 00000000
+     *
+     * o: opcode binary
+     * s: reg binary
+     * 0: placeholder zeros
+     */
+    private string assembleJmpRegInst(JmpRegInst instruction) {
+        int opcodeBin = assembleOpcode(instruction.instName);
+        int regBin = assembleRegister(instruction.reg);
+        int bin = opcodeBin << 26;
+        bin += regBin << 21;
+
         return bin.ToString("X8");
     }
 

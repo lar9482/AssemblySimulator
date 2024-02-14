@@ -6,10 +6,10 @@ using System.Threading.Tasks;
 namespace Compiler.Assembler.Instruction;
 
 public class JmpBranchInst : Inst {
-    private string reg1;
-    private string reg2;
+    public string reg1 { get; }
+    public string reg2 { get; }
 
-    private string label;
+    public string label { get; }
 
     public JmpBranchInst(string reg1, string reg2, string label, string instName) 
     : base(instName) {

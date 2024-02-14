@@ -245,6 +245,46 @@ public class Assembler {
         return bin.ToString("X8");
     }
 
+    /*
+     * Target format:
+     * ooooooss sssttttt diiiiiii iiiiiiii
+     *
+     * o: opcode binary
+     * s: reg1 binary
+     * t: reg2 binary
+     * d: sign of the offset. 1 is negative. 0 is positive
+     * i: The jump offset number binary. Represented as a two's complement.
+     */
+    private string assembleJmpBranchInst(JmpBranchInst instruction, int place) {
+        int opcodeBin = assembleOpcode(instruction.instName);
+        int reg1Bin = assembleRegister(instruction.reg1);
+        int reg2Bin = assembleRegister(instruction.reg2);
+
+        int currentAddress = instSizeByte*place + baseAddress;
+        int labelAddress = labelAddresses[instruction.label];
+        int jumpOffsetBin = (labelAddress - (currentAddress - 4)) >> 2;
+        //These numbers define the bounds of a number that can fit in 15 binary digits,
+        //which is the allocated space for an immmediate number
+        if (jumpOffsetBin > 32767 || jumpOffsetBin < -32767) {
+            throw new Exception("Invalid jump branch instruction. Offset must be inbetween 32767 and -32767");
+        }
+
+        int sign;
+        if (jumpOffsetBin < 0) {
+            sign = 1;
+            jumpOffsetBin = ~jumpOffsetBin+1;
+        } else {
+            sign = 0;
+        }
+        
+        int bin = opcodeBin << 26;
+        bin += reg1Bin << 21;
+        bin += reg2Bin << 16;
+        bin += sign << 15;
+        bin += jumpOffsetBin;
+        
+        return bin.ToString("X8");
+    }
     private string assembleLabelInst(LabelInst instruction) {
         int binAddress = labelAddresses[instruction.instName];
         return binAddress.ToString("X8");

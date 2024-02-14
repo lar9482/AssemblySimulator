@@ -73,9 +73,14 @@ public class Assembler {
                     );
                     break;
                 case "JmpBranch":
+                    assembledInstructions.Add(
+                        assembleJmpBranchInst(
+                            (JmpBranchInst) instruction, i
+                        )
+                    );
                     break;
                 default:
-                    break;
+                    throw new Exception("Unexpected instruction seen");
             }
         }
     }

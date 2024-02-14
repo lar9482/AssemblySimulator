@@ -13,7 +13,7 @@ public class Assembler {
     private int baseAddress;
     private Dictionary<string, int> labelAddresses;
 
-    private const int instSize = 4;
+    private const int instSizeByte = 4;
 
     public Assembler(int baseAddress) {
         this.baseAddress = baseAddress;
@@ -26,7 +26,9 @@ public class Assembler {
         computeLabelAddresses(instructions);
 
         List<string> assembledInstructions = new List<string>();
-        foreach (Inst instruction in instructions) {
+        for (int i = 0; i < instructions.Count; i++) {
+            Inst instruction = instructions[i];
+
             switch (instruction.GetType().Name) {
                 case "LabelInst":
                     assembledInstructions.Add(
@@ -58,7 +60,12 @@ public class Assembler {
                     break;
                 case "JmpRegInst":
                     break;
-                case "JmpLabel":
+                case "JmpLabelInst":
+                    assembledInstructions.Add(
+                        assembleJmpLabelInst(
+                            (JmpLabelInst) instruction, i
+                        )
+                    );
                     break;
                 case "JmpBranch":
                     break;
@@ -81,7 +88,7 @@ public class Assembler {
             Inst instruction = instructions[i];
 
             if (instruction.GetType() == typeof(LabelInst)) {
-                labelAddresses.Add(instruction.instName, baseAddress + i*instSize);
+                labelAddresses.Add(instruction.instName, baseAddress + i*instSizeByte);
             }
         }
     }
@@ -178,7 +185,30 @@ public class Assembler {
         bin += signBin << 15;
         bin += offsetBin;
 
-        return bin.ToString("X8");;
+        return bin.ToString("X8");
+    }
+
+    /*
+     * Target format:
+     * ooooooii iiiiiiii iiiiiiii iiiiiiii
+     *
+     * o: opcode binary
+     * i: The jump number binary. Represented as a two's complement.
+     */
+    private string assembleJmpLabelInst(JmpLabelInst instruction, int place) {
+        int opcodeBin = assembleOpcode(instruction.instName);
+
+        int currentAddress = instSizeByte*place + baseAddress;
+        int labelAddress = labelAddresses[instruction.label];
+        int jumpOffsetBin = (labelAddress - (currentAddress - 4)) >> 2;
+
+        if (jumpOffsetBin > 67108863 || jumpOffsetBin < -67108863) {
+            throw new Exception("Invalid jump instruction. jump offset must be inbetween 32767 and -32767");
+        }
+        
+        int bin = opcodeBin << 26;
+        bin += jumpOffsetBin;
+        return bin.ToString("X8");
     }
 
     private string assembleLabelInst(LabelInst instruction) {

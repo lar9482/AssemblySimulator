@@ -8,7 +8,7 @@ using Compiler.Assembler.Instruction.AssembledInst;
 namespace Compiler.Assembler.Instruction;
 
 public class JmpLabelInst : Inst {
-    private string label;
+    public string label { get; }
 
     public JmpLabelInst(string label, string instName, InstType type)
     : base(instName, type) {

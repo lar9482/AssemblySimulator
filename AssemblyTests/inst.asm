@@ -2,6 +2,7 @@ main:
 mov r1, r2
 add r2, r2
 sub r3, r3
+test:
 mult r4, r4
 div r5, r5
 or r6, r6
@@ -10,7 +11,6 @@ not r8, r8
 nor r9, r9
 sllv r10, r10
 srav r11, r11
-
 movI r9, 1000 
 movI r9, -1000
 addI r1, 100
@@ -27,11 +27,12 @@ lw r11, 0[r2]
 sb r10, 0[r1]
 sw r11, 0[r2]
 
+jmp unconditionalJump
+addI r1, 100
+unconditionalJump:
+
 jmpRet r1
 jmpL_Reg r1
-
-jmp unconditionalJump
-unconditionalJump:
 
 bEq rZERO, r1, zeroJump
 zeroJump:

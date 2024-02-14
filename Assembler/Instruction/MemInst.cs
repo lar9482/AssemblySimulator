@@ -2,7 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Compiler.Assembler.Instruction.AssembledInst;
+
 namespace Compiler.Assembler.Instruction;
 
 public class MemInst : Inst {
@@ -10,14 +10,10 @@ public class MemInst : Inst {
     public string memReg { get; }
     public int offset { get; }
 
-    public MemInst(string reg, string memReg, int offset, string instName, InstType type) 
-    : base(instName, type) {
+    public MemInst(string reg, string memReg, int offset, string instName) 
+    : base(instName) {
         this.reg = reg;
         this.memReg = memReg;
         this.offset = offset;
-    }
-    
-    public override AsmInst assembleInst() {
-        throw new NotImplementedException();
     }
 }

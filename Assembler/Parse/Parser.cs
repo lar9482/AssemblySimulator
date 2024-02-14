@@ -89,8 +89,7 @@ public class Parser {
         return new RegInst(
             reg1Token.lexeme,
             reg2Token.lexeme,
-            opcodeToken.lexeme,
-            InstType.RegInst
+            opcodeToken.lexeme
         );
     }
 
@@ -103,8 +102,7 @@ public class Parser {
         return new ImmInst(
             regToken.lexeme,
             Int32.Parse(integerToken.lexeme),
-            opcodeToken.lexeme,
-            InstType.ImmInst
+            opcodeToken.lexeme
         );
     }
 
@@ -121,8 +119,7 @@ public class Parser {
             regToken.lexeme,
             memRegToken.lexeme,
             Int32.Parse(offsetToken.lexeme),
-            opcodeToken.lexeme,
-            InstType.MemInst
+            opcodeToken.lexeme
         );
     }
 
@@ -131,7 +128,7 @@ public class Parser {
         Token regToken = parseRegister();
 
         return new JmpRegInst(
-            regToken.lexeme, opcodeToken.lexeme, InstType.JmpRegInst
+            regToken.lexeme, opcodeToken.lexeme
         );
     }
 
@@ -140,7 +137,7 @@ public class Parser {
         Token labelToken = consume(TokenType.identifier);
 
         return new JmpLabelInst(
-            labelToken.lexeme, opcodeToken.lexeme, InstType.JmpRegInst
+            labelToken.lexeme, opcodeToken.lexeme
         );
     }
 
@@ -156,8 +153,7 @@ public class Parser {
             reg1Token.lexeme,
             reg2Token.lexeme,
             labelToken.lexeme,
-            opcodeToken.lexeme,
-            InstType.JmpBranchInst
+            opcodeToken.lexeme
         );
     }
 
@@ -166,8 +162,7 @@ public class Parser {
         consume(TokenType.colon);
 
         return new LabelInst(
-            labelToken.lexeme,
-            InstType.LabelInst
+            labelToken.lexeme
         );
     }
 

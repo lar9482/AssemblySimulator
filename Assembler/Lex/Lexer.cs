@@ -195,7 +195,7 @@ public class Lexer {
                 return new Token(lexeme, lineCounter, TokenType.jmpL_Inst);
             case "jmpL_Reg":
                 return new Token(lexeme, lineCounter, TokenType.jmpL_Reg_Inst);
-            case "jmpRet":
+            case "jmpReg":
                 return new Token(lexeme, lineCounter, TokenType.jmpRet_Inst);
             case "lb":
                 return new Token(lexeme, lineCounter, TokenType.lb_Inst);

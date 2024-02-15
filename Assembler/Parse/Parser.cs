@@ -68,6 +68,9 @@ public class Parser {
             case TokenType.identifier:
                 instructions.Add(parseLabelInst());
                 break;
+            case TokenType.halt_Inst:
+                instructions.Add(parseInterruptInst());
+                break;
             case TokenType.EOF:
                 return instructions;
             default:
@@ -163,6 +166,15 @@ public class Parser {
 
         return new LabelInst(
             labelToken.lexeme
+        );
+    }
+
+    private InterruptInst parseInterruptInst() {
+        Token commandToken = consume(tokenQueue.Peek().type);
+
+        return new InterruptInst(
+            commandToken.lexeme,
+            "interrupt"
         );
     }
 

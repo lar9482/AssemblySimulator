@@ -2,7 +2,6 @@ main:
 mov r1, r2
 add r2, r2
 sub r3, r3
-test:
 mult r4, r4
 div r5, r5
 or r6, r6

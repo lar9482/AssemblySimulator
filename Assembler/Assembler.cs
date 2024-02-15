@@ -5,7 +5,7 @@ using Compiler.Assembler.Tokens;
 using Compiler.Assembler.Lex;
 using Compiler.Assembler.Parse;
 using Compiler.Assembler.Instruction;
-using System.Data;
+
 namespace Compiler.Assembler;
 
 public class Assembler {
@@ -79,6 +79,13 @@ public class Assembler {
                         )
                     );
                     break;
+                case "InterruptInst":
+                    assembledInstructions.Add(
+                        assembleInterruptInst(
+                            (InterruptInst) instruction
+                        )
+                    );
+                    break;
                 default:
                     throw new Exception("Unexpected instruction seen");
             }
@@ -89,15 +96,13 @@ public class Assembler {
 
     private void saveAssembledProgram(List<string> assembledInstructions, string filePath) {
 
-        using (StreamWriter writer = new StreamWriter(filePath))
-        {
-            foreach (string str in assembledInstructions)
-            {
+        using (StreamWriter writer = new StreamWriter(filePath)) {
+            foreach (string str in assembledInstructions) {
                 writer.WriteLine(str);
             }
         }
     }
-    
+
     private List<Inst> parseProgram(string content) {
         Lexer lexer = new Lexer();
         Queue<Token> tokens = lexer.lexProgram(content);
@@ -303,6 +308,25 @@ public class Assembler {
         
         return bin.ToString("X8");
     }
+
+    /*
+     * Target format:
+     * oooooocc ccc00000 00000000 00000000
+     *
+     * o: opcode binary
+     * s: command binary
+     * 0: placeholder zeros
+     */
+    private string assembleInterruptInst(InterruptInst instruction) {
+        int opcodeBin = assembleOpcode(instruction.instName);
+        int commandBin = assembleInterruptCommand(instruction.command);
+
+        int bin = opcodeBin << 26;
+        bin += commandBin << 21;
+        
+        return bin.ToString("X8");
+    }
+
     private string assembleLabelInst(LabelInst instruction) {
         int binAddress = labelAddresses[instruction.instName];
         return binAddress.ToString("X8");
@@ -372,8 +396,18 @@ public class Assembler {
             case "lw": return 29;
             case "sb": return 30;
             case "sw": return 31;
+            case "interrupt": return 32;
             default:
                 throw new Exception(String.Format("{0} is not a valid opcode", opcode));
+        }
+    }
+
+    private int assembleInterruptCommand(string command) {
+        switch(command) {
+            case "halt":
+                return 0;
+            default:
+                throw new Exception("Unrecognized interrupt command");
         }
     }
 

@@ -113,10 +113,9 @@ public class Assembler {
 
     private void computeLabelAddresses(List<Inst> instructions) {
         for(int i = 0; i < instructions.Count; i++) {
-            Inst instruction = instructions[i];
-
-            if (instruction.GetType() == typeof(LabelInst)) {
-                labelAddresses.Add(instruction.instName, baseAddress + i*instSizeByte);
+            if (instructions[i].GetType() == typeof(LabelInst)) {
+                LabelInst instruction = (LabelInst) instructions[i];
+                labelAddresses.Add(instruction.label, baseAddress + i*instSizeByte);
             }
         }
     }
@@ -328,8 +327,9 @@ public class Assembler {
     }
 
     private string assembleLabelInst(LabelInst instruction) {
-        int binAddress = labelAddresses[instruction.instName];
-        return binAddress.ToString("X8");
+        int opcodeBin = assembleOpcode(instruction.instName);
+        int bin = opcodeBin << 26;
+        return bin.ToString("X8");
     }
 
     private int assembleRegister(string register) {
@@ -397,6 +397,7 @@ public class Assembler {
             case "sb": return 30;
             case "sw": return 31;
             case "interrupt": return 32;
+            case "label": return 33;
             default:
                 throw new Exception(String.Format("{0} is not a valid opcode", opcode));
         }

@@ -20,8 +20,8 @@ public class Assembler {
         this.labelAddresses = new Dictionary<string, int>();
     }
     
-    public void assembleFile(string filePath) {
-        StreamReader sr = new StreamReader(filePath);
+    public void assembleFile(string filePathInput, string filePathOutput) {
+        StreamReader sr = new StreamReader(filePathInput);
         List<Inst> instructions = parseProgram(sr.ReadToEnd());
         computeLabelAddresses(instructions);
 
@@ -83,9 +83,21 @@ public class Assembler {
                     throw new Exception("Unexpected instruction seen");
             }
         }
-        Console.WriteLine();
+
+        saveAssembledProgram(assembledInstructions, filePathOutput);
     }
 
+    private void saveAssembledProgram(List<string> assembledInstructions, string filePath) {
+
+        using (StreamWriter writer = new StreamWriter(filePath))
+        {
+            foreach (string str in assembledInstructions)
+            {
+                writer.WriteLine(str);
+            }
+        }
+    }
+    
     private List<Inst> parseProgram(string content) {
         Lexer lexer = new Lexer();
         Queue<Token> tokens = lexer.lexProgram(content);

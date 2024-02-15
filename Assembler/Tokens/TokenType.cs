@@ -68,6 +68,8 @@ public enum TokenType {
     sb_Inst,
     sw_Inst,
 
+    //Control instructions
+    halt_Inst,
     identifier,
     integer,
 

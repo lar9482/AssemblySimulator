@@ -22,6 +22,8 @@ public class Lexer {
 
     public Queue<Token> lexProgram(string programText) {
         Queue<Token> tokens = new Queue<Token>();
+
+        Token lastTokenSeen = new Token("", 0, TokenType.halt_Inst);
         while (programText.Length > 0) {
             Tuple<string, string> longestMatchWithType = scanLongestMatch(programText);
             string matchedLexeme = longestMatchWithType.Item1;
@@ -29,15 +31,16 @@ public class Lexer {
 
             switch(matchType) {
                 case "matchIdentifier":
-                    tokens.Enqueue(resolveWordLexeme(matchedLexeme));
+                    lastTokenSeen = resolveWordLexeme(matchedLexeme);
+                    tokens.Enqueue(lastTokenSeen);
                     break;
                 case "matchOneSymbol":
-                    tokens.Enqueue(resolveOneSymbolLexeme(matchedLexeme));
+                    lastTokenSeen = resolveOneSymbolLexeme(matchedLexeme); 
+                    tokens.Enqueue(lastTokenSeen);
                     break;
                 case "matchIntegers":
-                    tokens.Enqueue(
-                        new Token(matchedLexeme, lineCounter, TokenType.integer)
-                    );
+                    lastTokenSeen = new Token(matchedLexeme, lineCounter, TokenType.integer);
+                    tokens.Enqueue(lastTokenSeen);
                     break;
                 case "matchWhitespace":
                     if (matchedLexeme == "\n")
@@ -51,8 +54,13 @@ public class Lexer {
             programText = programText.Remove(0, matchedLexeme.Length);
         }
 
+        // A halt instruction is automatically added if the source file didn't have one.
+        if (lastTokenSeen.type != TokenType.halt_Inst) {
+            tokens.Enqueue(new Token("halt", lineCounter+1, TokenType.halt_Inst));
+        }
+
         //This EOF token will ensure that the parser can determine when to terminate
-        tokens.Enqueue(new Token("EOF",  lineCounter+1, TokenType.EOF));
+        tokens.Enqueue(new Token("EOF",  lineCounter+2, TokenType.EOF));
         return tokens;
     }
 
@@ -205,6 +213,8 @@ public class Lexer {
                 return new Token(lexeme, lineCounter, TokenType.sb_Inst);
             case "sw":
                 return new Token(lexeme, lineCounter, TokenType.sw_Inst);
+            case "halt":
+                return new Token(lexeme, lineCounter, TokenType.halt_Inst);
             default:
                 return new Token(lexeme, lineCounter, TokenType.identifier);
         }

@@ -7,7 +7,9 @@ using System.Threading.Tasks;
 namespace Compiler.Assembler.Instruction;
 
 public class LabelInst : Inst {
-
-    public LabelInst(string label) : base(label){
+    public string label { get; }
+    
+    public LabelInst(string label, string instName) : base(instName){
+        this.label = label;
     }
 }

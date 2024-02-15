@@ -165,7 +165,8 @@ public class Parser {
         consume(TokenType.colon);
 
         return new LabelInst(
-            labelToken.lexeme
+            labelToken.lexeme,
+            "label"
         );
     }
 

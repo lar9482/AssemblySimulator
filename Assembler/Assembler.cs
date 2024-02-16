@@ -427,11 +427,4 @@ public class Assembler {
                 throw new Exception("Unrecognized interrupt command");
         }
     }
-
-    private void printBytes(byte[] bytes) {
-        Array.Reverse(bytes);
-        foreach (byte b in bytes) {   
-            Console.Write(Convert.ToString(b, 2).PadLeft(8, '0')); // Print each byte in binary format
-        }
-    }
 }

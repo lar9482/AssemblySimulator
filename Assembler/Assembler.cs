@@ -10,13 +10,13 @@ namespace Compiler.Assembler;
 
 public class Assembler {
 
-    private int baseAddress;
+    private int startProgramAddress;
     private Dictionary<string, int> labelAddresses;
 
     private const int instSizeByte = 4;
 
     public Assembler(int baseAddress) {
-        this.baseAddress = baseAddress;
+        this.startProgramAddress = baseAddress;
         this.labelAddresses = new Dictionary<string, int>();
     }
     
@@ -115,7 +115,7 @@ public class Assembler {
         for(int i = 0; i < instructions.Count; i++) {
             if (instructions[i].GetType() == typeof(LabelInst)) {
                 LabelInst instruction = (LabelInst) instructions[i];
-                labelAddresses.Add(instruction.label, baseAddress + i*instSizeByte);
+                labelAddresses.Add(instruction.label, startProgramAddress + i*instSizeByte);
             }
         }
     }
@@ -226,7 +226,7 @@ public class Assembler {
     private string assembleJmpLabelInst(JmpLabelInst instruction, int place) {
         int opcodeBin = assembleOpcode(instruction.instName);
 
-        int currentAddress = instSizeByte*place + baseAddress;
+        int currentAddress = instSizeByte*place + startProgramAddress;
         int labelAddress = labelAddresses[instruction.label];
         int jumpOffsetBin = (labelAddress - (currentAddress - 4)) >> 2;
 
@@ -282,7 +282,7 @@ public class Assembler {
         int reg1Bin = assembleRegister(instruction.reg1);
         int reg2Bin = assembleRegister(instruction.reg2);
 
-        int currentAddress = instSizeByte*place + baseAddress;
+        int currentAddress = instSizeByte*place + startProgramAddress;
         int labelAddress = labelAddresses[instruction.label];
         int jumpOffsetBin = (labelAddress - (currentAddress - 4)) >> 2;
         //These numbers define the bounds of a number that can fit in 15 binary digits,
@@ -326,9 +326,25 @@ public class Assembler {
         return bin.ToString("X8");
     }
 
+    /*
+     * Target format:
+     * ooooooM0 00000000 00000000 00000000
+     *
+     * o: opcode binary
+     * M: A bit to signify if label is 'main:', which will denote the start of program exeuction.
+     *    1 means it is 'main:', 0 means it is not.
+     * 0: placeholder zeros
+     */
     private string assembleLabelInst(LabelInst instruction) {
         int opcodeBin = assembleOpcode(instruction.instName);
+        int mainBin;
+        if (instruction.label == "main") {
+            mainBin = 1;
+        } else {
+            mainBin = 0;
+        }
         int bin = opcodeBin << 26;
+        bin += mainBin << 25;
         return bin.ToString("X8");
     }
 

@@ -58,7 +58,8 @@ public class Machine {
         int reg2 = decodeSecondRegister(instruction);
         int imm = decodeImmediate(instruction);
         int smallJumpOffset = decodeSmallJumpOffset(instruction);
-        Console.WriteLine(smallJumpOffset);
+        int largeJumpOffset = decodeLargeJumpOffset(instruction);
+        Console.WriteLine(largeJumpOffset);
     }
 
     /*
@@ -102,8 +103,11 @@ public class Machine {
         byte thirdByte = instruction[WORD_BYTE_SIZE-3];
         byte fourthByte = instruction[WORD_BYTE_SIZE-4];
         
-        int sign = (secondByte & 0x10) >> 4;
-        int imm = ((secondByte & 0xF) << 16) + (thirdByte << 8) + fourthByte;
+        byte secondByteSignMask = 0x10;
+        byte secondByteImmSign = 0xF;
+
+        int sign = (secondByte & secondByteSignMask) >> 4;
+        int imm = ((secondByte & secondByteImmSign) << 16) + (thirdByte << 8) + fourthByte;
 
         return (sign == 0) ? imm : ~imm+1;
     }
@@ -116,14 +120,37 @@ public class Machine {
         byte thirdByte = instruction[WORD_BYTE_SIZE-3];
         byte fourthByte = instruction[WORD_BYTE_SIZE-4];
 
-        int sign = (thirdByte & 0x80) >> 7;
-        int offset = ((thirdByte & 0x7F) << 8) + fourthByte;
+        byte thirdByteSignMask = 0x80;
+        byte thirdByteOffsetMask = 0x7F;
+
+        int sign = (thirdByte & thirdByteSignMask) >> 7;
+        int offset = ((thirdByte & thirdByteOffsetMask) << 8) + fourthByte;
 
         return (sign == 0) ? offset : ~offset+1;
     }
 
+    /*
+     * Decoding:
+     * 000000di iiiiiiii iiiiiiii iiiiiiii
+     */
     private int decodeLargeJumpOffset(byte[] instruction) {
-        return 0;
+        byte firstByte = instruction[WORD_BYTE_SIZE-1];
+        byte secondByte = instruction[WORD_BYTE_SIZE-2];
+        byte thirdByte = instruction[WORD_BYTE_SIZE-3];
+        byte fourthByte = instruction[WORD_BYTE_SIZE-4];
+
+        byte firstByteSignMask = 0x2;
+        byte firstByteOffsetMask = 0x1;
+
+        int sign = (firstByte & firstByteSignMask) >> 1;
+        int offset = (
+            ((firstByte & firstByteOffsetMask) << 24) +
+            (secondByte << 16) +
+            (thirdByte << 8) +
+            (fourthByte)
+        );
+
+        return (sign == 0) ? offset : ~offset+1;
     }
 
     private const int WORD_BYTE_SIZE = 4;

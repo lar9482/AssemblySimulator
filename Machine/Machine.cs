@@ -56,7 +56,8 @@ public class Machine {
         int opcode = decodeOpcode(instruction);
         int reg1 = decodeFirstRegister(instruction);
         int reg2 = decodeSecondRegister(instruction);
-        Console.WriteLine(reg2);
+        int imm = decodeImmediate(instruction);
+        Console.WriteLine(imm);
     }
 
     /*
@@ -89,6 +90,21 @@ public class Machine {
         byte secondByte = instruction[WORD_BYTE_SIZE-2];
         byte reg2Mask = 0x1F;
         return secondByte & reg2Mask;
+    }
+
+    /*
+     * Decoding
+     * 00000000 000diiii iiiiiiii iiiiiiii
+     */
+    public int decodeImmediate(byte[] instruction) {
+        byte secondByte = instruction[WORD_BYTE_SIZE-2];
+        byte thirdByte = instruction[WORD_BYTE_SIZE-3];
+        byte fourthByte = instruction[WORD_BYTE_SIZE-4];
+        
+        int sign = (secondByte & 0x10) >> 4;
+        int imm = ((secondByte & 0xF) << 16) + (thirdByte << 8) + fourthByte;
+
+        return (sign == 0) ? imm : ~imm+1;
     }
 
     private const int WORD_BYTE_SIZE = 4;

@@ -57,7 +57,8 @@ public class Machine {
         int reg1 = decodeFirstRegister(instruction);
         int reg2 = decodeSecondRegister(instruction);
         int imm = decodeImmediate(instruction);
-        Console.WriteLine(imm);
+        int smallJumpOffset = decodeSmallJumpOffset(instruction);
+        Console.WriteLine(smallJumpOffset);
     }
 
     /*
@@ -96,7 +97,7 @@ public class Machine {
      * Decoding
      * 00000000 000diiii iiiiiiii iiiiiiii
      */
-    public int decodeImmediate(byte[] instruction) {
+    private int decodeImmediate(byte[] instruction) {
         byte secondByte = instruction[WORD_BYTE_SIZE-2];
         byte thirdByte = instruction[WORD_BYTE_SIZE-3];
         byte fourthByte = instruction[WORD_BYTE_SIZE-4];
@@ -105,6 +106,24 @@ public class Machine {
         int imm = ((secondByte & 0xF) << 16) + (thirdByte << 8) + fourthByte;
 
         return (sign == 0) ? imm : ~imm+1;
+    }
+
+    /*
+     * Decoding
+     * 00000000 00000000 diiiiiii iiiiiiii
+     */
+    private int decodeSmallJumpOffset(byte[] instruction) {
+        byte thirdByte = instruction[WORD_BYTE_SIZE-3];
+        byte fourthByte = instruction[WORD_BYTE_SIZE-4];
+
+        int sign = (thirdByte & 0x80) >> 7;
+        int offset = ((thirdByte & 0x7F) << 8) + fourthByte;
+
+        return (sign == 0) ? offset : ~offset+1;
+    }
+
+    private int decodeLargeJumpOffset(byte[] instruction) {
+        return 0;
     }
 
     private const int WORD_BYTE_SIZE = 4;

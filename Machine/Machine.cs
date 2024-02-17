@@ -257,6 +257,36 @@ public class Machine {
             case Opcode.sra:
                 registers[inst.reg1] = registers[inst.reg1] >> inst.imm;
                 break;
+            case Opcode.lb:
+                int addressLB = registers[inst.reg2]+inst.smallJumpOffset;
+                byte memByteLB = RAM[addressLB];
+                registers[inst.reg1] = memByteLB;
+                break;
+            case Opcode.lw:
+                int addressLW = registers[inst.reg2]+inst.smallJumpOffset;
+                byte[] memWordLW = new byte[] {
+                    RAM[addressLW],
+                    RAM[addressLW+1],
+                    RAM[addressLW+2],
+                    RAM[addressLW+3]
+                };
+                registers[inst.reg1] = BitConverter.ToInt32(memWordLW, 0);
+                break;
+            case Opcode.sb:
+                byte[] reg1BytesSB = BitConverter.GetBytes(registers[inst.reg1]);
+                byte leastSignByteSB = reg1BytesSB[0];
+
+                int addressSB = registers[inst.reg2]+inst.smallJumpOffset;
+                RAM[addressSB] = leastSignByteSB;
+                break;
+            case Opcode.sw:
+                byte[] reg1BytesSW = BitConverter.GetBytes(registers[inst.reg1]);
+                int addressSW = registers[inst.reg2]+inst.smallJumpOffset;
+                RAM[addressSW] = reg1BytesSW[0];
+                RAM[addressSW+1] = reg1BytesSW[1];
+                RAM[addressSW+2] = reg1BytesSW[2];
+                RAM[addressSW+3] = reg1BytesSW[3];
+                break;
             case Opcode.interrupt:
             case Opcode.label:
                 break;
@@ -275,6 +305,15 @@ public class Machine {
     private int regPC = 0;
     private int[] registers;
     
+
+    /**
+     * NOTE: The order/assignments of RegID and Opcode are important 
+     * because they match with the instruction encodings.
+     *
+     * This will allow the machine to do clean pattern matching when referencing the 
+     * registers and opcodes.
+     * 
+     */
     private struct RegID {
         public const int rZERO = 0;
         public const int r1 = 1;

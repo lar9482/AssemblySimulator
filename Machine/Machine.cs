@@ -9,7 +9,7 @@ public class Machine {
     public Machine(int startProgramAddress) {
         this.startProgramAddress = startProgramAddress;
         this.RAM = new byte[MEMORY_SIZE];
-        this.registers = new int[22];
+        this.registers = new int[typeof(RegID).GetFields().Length];
 
         registers[RegID.rZERO] = 0;
         registers[RegID.r1] = 0;
@@ -190,6 +190,41 @@ public class Machine {
 
     private void executeInstruction(DecodedInst inst) {
         switch (inst.opcode) {
+            case Opcode.mov:
+                registers[inst.reg1] = registers[inst.reg2];
+                break;
+            case Opcode.add:
+                registers[inst.reg1] += registers[inst.reg2];
+                break;
+            case Opcode.sub:
+                registers[inst.reg1] -= registers[inst.reg2];
+                break;
+            case Opcode.mult:
+                registers[RegID.rHI] = registers[inst.reg1] * registers[inst.reg2];
+                registers[RegID.rLO] = registers[inst.reg1] * registers[inst.reg2];
+                break;
+            case Opcode.div:
+                registers[RegID.rHI] = (int) registers[inst.reg1] / registers[inst.reg2];
+                registers[RegID.rLO] = registers[inst.reg1] % registers[inst.reg2];
+                break;
+            case Opcode.and:
+                registers[inst.reg1] = registers[inst.reg1] & registers[inst.reg2];
+                break;
+            case Opcode.or:
+                registers[inst.reg1] = registers[inst.reg1] | registers[inst.reg2];
+                break;
+            case Opcode.xor:
+                registers[inst.reg1] = registers[inst.reg1] ^ registers[inst.reg2];
+                break;
+            case Opcode.nor:
+                registers[inst.reg1] = ~(registers[inst.reg1] | registers[inst.reg2]);
+                break;
+            case Opcode.sllv:
+                registers[inst.reg1] = registers[inst.reg1] << registers[inst.reg2];
+                break;
+            case Opcode.srav:
+                registers[inst.reg1] = registers[inst.reg1] >> registers[inst.reg2];
+                break;
             case Opcode.movI:
                 registers[inst.reg1] = inst.imm;
                 break;

@@ -1,3 +1,4 @@
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
 namespace Compiler.Machine;
@@ -37,12 +38,12 @@ public class Machine {
 
         while (!currInstruction.SequenceEqual(HALT_INST)) {
             currInstruction = fetchInstruction();
-            decodeInstruction(currInstruction);
+            DecodedInst inst = decodeInstruction(currInstruction);
             regPC += WORD_BYTE_SIZE;
         }
     }
 
-    public byte[] fetchInstruction() {
+    private byte[] fetchInstruction() {
         byte[] instruction = new byte[4];
         instruction[0] = RAM[regPC];
         instruction[1] = RAM[regPC+1];
@@ -52,21 +53,29 @@ public class Machine {
         return instruction;
     }
 
-    public void decodeInstruction(byte[] instruction) {
+    private DecodedInst decodeInstruction(byte[] instruction) {
         int opcode = decodeOpcode(instruction);
         int reg1 = decodeFirstRegister(instruction);
         int reg2 = decodeSecondRegister(instruction);
         int imm = decodeImmediate(instruction);
         int smallJumpOffset = decodeSmallJumpOffset(instruction);
         int largeJumpOffset = decodeLargeJumpOffset(instruction);
-        Console.WriteLine(largeJumpOffset);
+
+        return new DecodedInst(
+            opcode,
+            reg1,
+            reg2,
+            imm,
+            smallJumpOffset,
+            largeJumpOffset
+        );
     }
 
     /*
      * Decoding
      * XXXXXX00 00000000 00000000 00000000
      */
-    public int decodeOpcode(byte[] instruction) {
+    private int decodeOpcode(byte[] instruction) {
         byte mostSignByte = instruction[WORD_BYTE_SIZE-1];
         return (mostSignByte >> 2);
     }
@@ -75,7 +84,7 @@ public class Machine {
      * Decoding
      * 000000XX XXX00000 00000000 00000000
      */
-    public int decodeFirstRegister(byte[] instruction) {
+    private int decodeFirstRegister(byte[] instruction) {
         byte firstByte = instruction[WORD_BYTE_SIZE-1];
         byte secondByte = instruction[WORD_BYTE_SIZE-2];
 
@@ -88,7 +97,7 @@ public class Machine {
      * Decoding
      * 00000000 000XXXXX 00000000 00000000
      */
-    public int decodeSecondRegister(byte[] instruction) {
+    private int decodeSecondRegister(byte[] instruction) {
         byte secondByte = instruction[WORD_BYTE_SIZE-2];
         byte reg2Mask = 0x1F;
         return secondByte & reg2Mask;
@@ -183,4 +192,25 @@ public class Machine {
     private int rRET_Reg = 0;
     private int rHI_Reg = 0;
     private int rLO_Reg = 0;
+
+    private struct DecodedInst {
+        public int opcode;
+        public int reg1;
+        public int reg2;
+        public int imm;
+        public int smallJumpOffset;
+        public int largeJumpOffset;
+
+        public DecodedInst(
+            int opcode, int reg1, int reg2, int imm,
+            int smallJumpOffset, int largeJumpOffset
+        ) {
+            this.opcode = opcode;
+            this.reg1 = reg1;
+            this.reg2 = reg2;
+            this.imm = imm;
+            this.smallJumpOffset = smallJumpOffset;
+            this.largeJumpOffset = largeJumpOffset;
+        }
+    }
 }

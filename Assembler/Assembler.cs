@@ -369,10 +369,10 @@ public class Assembler {
             case "r16": return 16;
             case "rSP": return 17;
             case "rFP": return 18;
-            case "rPC":   return 19;  
-            case "rRET": return 20;
-            case "rHI":  return 21;
-            case "rLO": return 22;
+            case "rRET": return 19;
+            case "rHI":  return 20;
+            case "rLO": return 21;
+            case "rPC": return 22;  
             default:
                 throw new Exception(String.Format("{0} is not a valid register", register));
         }

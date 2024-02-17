@@ -8,6 +8,30 @@ public class Machine {
     public Machine(int startProgramAddress) {
         this.startProgramAddress = startProgramAddress;
         this.RAM = new byte[MEMORY_SIZE];
+        this.registers = new int[22];
+
+        registers[RegID.rZERO] = 0;
+        registers[RegID.r1] = 0;
+        registers[RegID.r2] = 0;
+        registers[RegID.r3] = 0;
+        registers[RegID.r4] = 0;
+        registers[RegID.r5] = 0;
+        registers[RegID.r6] = 0;
+        registers[RegID.r7] = 0;
+        registers[RegID.r8] = 0;
+        registers[RegID.r9] = 0;
+        registers[RegID.r10] = 0; 
+        registers[RegID.r11] = 0; 
+        registers[RegID.r12] = 0; 
+        registers[RegID.r13] = 0; 
+        registers[RegID.r14] = 0; 
+        registers[RegID.r15] = 0; 
+        registers[RegID.r16] = 0; 
+        registers[RegID.rSP] = 0; 
+        registers[RegID.rFP] = 0; 
+        registers[RegID.rRET] = 0;
+        registers[RegID.rHI] = 0; 
+        registers[RegID.rLO] = 0; 
     }
 
     public void loadProgram(string filePath) {
@@ -39,6 +63,7 @@ public class Machine {
         while (!currInstruction.SequenceEqual(HALT_INST)) {
             currInstruction = fetchInstruction();
             DecodedInst inst = decodeInstruction(currInstruction);
+            executeInstruction(inst);
             regPC += WORD_BYTE_SIZE;
         }
     }
@@ -162,6 +187,35 @@ public class Machine {
         return (sign == 0) ? offset : ~offset+1;
     }
 
+    private void executeInstruction(DecodedInst instruction) {
+        switch (instruction.opcode) {
+            case Opcode.movI:
+                break;
+            case Opcode.addI:
+                break;
+            case Opcode.subI:
+                break;
+            case Opcode.multI:
+                break;
+            case Opcode.divI:
+                break;
+            case Opcode.andI:
+                break;
+            case Opcode.orI:
+                break;
+            case Opcode.xorI:
+                break;
+            case Opcode.sll:
+                break;
+            case Opcode.sra:
+                break;
+            case Opcode.label:
+                break;
+            default:
+                throw new Exception("Unrecognized opcode");
+        }
+    }
+
     private const int WORD_BYTE_SIZE = 4;
     private const int MEMORY_SIZE = 0xFFFFFF;
     private byte[] MAIN_LABEL = {0, 0, 0, 134}; //Corresponds to the instruction 0x86000000, which is the main label encoding
@@ -170,28 +224,71 @@ public class Machine {
     private int startProgramAddress; 
     private byte[] RAM;
     private int regPC = 0;
-    private int rZERO_Reg = 0;
-    private int r1_Reg = 0;
-    private int r2_Reg = 0;
-    private int r3_Reg = 0;
-    private int r4_Reg = 0;
-    private int r5_Reg = 0;
-    private int r6_Reg = 0;
-    private int r7_Reg = 0;
-    private int r8_Reg = 0;
-    private int r9_Reg = 0;
-    private int r10_Reg = 0;
-    private int r11_Reg = 0;
-    private int r12_Reg = 0;
-    private int r13_Reg = 0;
-    private int r14_Reg = 0;
-    private int r15_Reg = 0;
-    private int r16_Reg = 0;
-    private int rSP_Reg = 0;
-    private int rFP_Reg = 0;
-    private int rRET_Reg = 0;
-    private int rHI_Reg = 0;
-    private int rLO_Reg = 0;
+    private int[] registers;
+    
+    private struct RegID {
+        public const int rZERO = 0;
+        public const int r1 = 1;
+        public const int r2 = 2;
+        public const int r3 = 3;
+        public const int r4 = 4;
+        public const int r5 = 5;
+        public const int r6 = 6;
+        public const int r7 = 7;
+        public const int r8 = 8;
+        public const int r9 = 9;
+        public const int r10 = 10;
+        public const int r11 = 11;
+        public const int r12 = 12;
+        public const int r13 = 13;
+        public const int r14 = 14;
+        public const int r15 = 15;
+        public const int r16 = 16;
+        public const int rSP = 17;
+        public const int rFP = 18;
+        public const int rRET = 19;
+        public const int rHI = 20;
+        public const int rLO = 21;
+        public RegID() {}
+    }
+
+    private struct Opcode {
+        public const int mov = 0;
+        public const int add = 1;
+        public const int sub = 2;
+        public const int mult = 3;
+        public const int div = 4;
+        public const int and = 5;
+        public const int or = 6;
+        public const int xor = 7;
+        public const int not = 8;
+        public const int nor = 9;
+        public const int sllv = 10;
+        public const int srav = 11;
+        public const int movI = 12;
+        public const int addI = 13;
+        public const int subI = 14;
+        public const int multI = 15;
+        public const int divI = 16;
+        public const int andI = 17;
+        public const int orI = 18;
+        public const int xorI = 19;
+        public const int sll = 20;
+        public const int sra = 21;
+        public const int bEq = 22;
+        public const int bNe = 23;
+        public const int jmp = 24;
+        public const int jmpL = 25;
+        public const int jmpL_Reg = 26;
+        public const int jmpReg = 27;
+        public const int lb = 28;
+        public const int lw = 29;
+        public const int sb = 30;
+        public const int sw = 31;
+        public const int interrupt = 32;
+        public const int label = 33;
+        public Opcode() {}
+    }
 
     private struct DecodedInst {
         public int opcode;

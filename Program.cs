@@ -11,4 +11,3 @@ assembler.assembleFile(assemblyFilePath, binFilePath);
 Machine machine = new Machine(startProgramAddress);
 machine.loadProgram(binFilePath);
 machine.runProgram();
-Console.WriteLine();

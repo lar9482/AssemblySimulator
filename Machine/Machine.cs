@@ -1,3 +1,4 @@
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
@@ -187,32 +188,45 @@ public class Machine {
         return (sign == 0) ? offset : ~offset+1;
     }
 
-    private void executeInstruction(DecodedInst instruction) {
-        switch (instruction.opcode) {
+    private void executeInstruction(DecodedInst inst) {
+        switch (inst.opcode) {
             case Opcode.movI:
+                registers[inst.reg1] = inst.imm;
                 break;
             case Opcode.addI:
+                registers[inst.reg1] += inst.imm;
                 break;
             case Opcode.subI:
+                registers[inst.reg1] -= inst.imm;
                 break;
             case Opcode.multI:
+                registers[RegID.rHI] = registers[inst.reg1] * inst.imm;
+                registers[RegID.rLO] = registers[inst.reg1] * inst.imm;
                 break;
             case Opcode.divI:
+                registers[RegID.rHI] = (int) registers[inst.reg1] / inst.imm;
+                registers[RegID.rLO] = registers[inst.reg1] % inst.imm;
                 break;
             case Opcode.andI:
+                registers[inst.reg1] = registers[inst.reg1] & inst.imm;
                 break;
             case Opcode.orI:
+                registers[inst.reg1] = registers[inst.reg1] | inst.imm;
                 break;
             case Opcode.xorI:
+                registers[inst.reg1] = registers[inst.reg1] ^ inst.imm;
                 break;
             case Opcode.sll:
+                registers[inst.reg1] = registers[inst.reg1] << inst.imm;
                 break;
             case Opcode.sra:
+                registers[inst.reg1] = registers[inst.reg1] >> inst.imm;
                 break;
+            case Opcode.interrupt:
             case Opcode.label:
                 break;
             default:
-                throw new Exception("Unrecognized opcode");
+                throw new Exception(String.Format("Unrecognized opcode {0}", inst.opcode));
         }
     }
 

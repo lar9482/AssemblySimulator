@@ -257,6 +257,19 @@ public class Machine {
             case Opcode.sra:
                 registers[inst.reg1] = registers[inst.reg1] >> inst.imm;
                 break;
+            case Opcode.bEq:
+                if (registers[inst.reg1] == registers[inst.reg2]) {
+                    regPC += (inst.smallJumpOffset) << 2;
+                }
+                break;
+            case Opcode.bNe:
+                if (registers[inst.reg1] != registers[inst.reg2]) {
+                    regPC += (inst.smallJumpOffset) << 2;
+                }
+                break;
+            case Opcode.jmp:
+                regPC += (inst.largeJumpOffset) << 2;
+                break;
             case Opcode.lb:
                 int addressLB = registers[inst.reg2]+inst.smallJumpOffset;
                 byte memByteLB = RAM[addressLB];

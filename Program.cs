@@ -2,8 +2,8 @@
 using Compiler.Machine;
 
 int startProgramAddress = 0;
-string assemblyFilePath = "./AssemblyTests/memInst.asm";
-string binFilePath = "./AssemblyTests/Output/memInst.out";
+string assemblyFilePath = "./AssemblyTests/branchInst.asm";
+string binFilePath = "./AssemblyTests/Output/branchInst.out";
 
 Assembler assembler = new Assembler(startProgramAddress);
 assembler.assembleFile(assemblyFilePath, binFilePath);

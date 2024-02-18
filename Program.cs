@@ -1,4 +1,4 @@
-﻿using Compiler.Assembler;
+﻿using Compiler.Assemble;
 using Compiler.Machine;
 
 int startProgramAddress = 0;

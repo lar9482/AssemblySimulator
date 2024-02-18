@@ -4,7 +4,7 @@ using System.Linq;
 using System.Reflection.Emit;
 using System.Threading.Tasks;
 
-namespace Compiler.Assembler.Instruction;
+namespace Compiler.Assemble.Instruction;
 
 public class LabelInst : Inst {
     public string label { get; }

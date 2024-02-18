@@ -1,8 +1,8 @@
 using System.Text.RegularExpressions;
 using System.Collections;
-using Compiler.Assembler.Tokens;
+using Compiler.Assemble.Tokens;
 
-namespace Compiler.Assembler.Lex;
+namespace Compiler.Assemble.Lex;
 
 public class Lexer {
     private readonly Regex matchIdentifier;

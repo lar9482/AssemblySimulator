@@ -4,11 +4,10 @@ using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 
-using Compiler.Assembler.Tokens;
-using Compiler.Assembler.Instruction;
-using System.Reflection.Emit;
+using Compiler.Assemble.Tokens;
+using Compiler.Assemble.Instruction;
 
-namespace Compiler.Assembler.Parse;
+namespace Compiler.Assemble.Parse;
 
 public class Parser {
     private Queue<Token> tokenQueue;

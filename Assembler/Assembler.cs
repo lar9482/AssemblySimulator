@@ -1,12 +1,12 @@
 using System.IO;
 using System.Collections;
 
-using Compiler.Assembler.Tokens;
-using Compiler.Assembler.Lex;
-using Compiler.Assembler.Parse;
-using Compiler.Assembler.Instruction;
+using Compiler.Assemble.Tokens;
+using Compiler.Assemble.Lex;
+using Compiler.Assemble.Parse;
+using Compiler.Assemble.Instruction;
 
-namespace Compiler.Assembler;
+namespace Compiler.Assemble;
 
 public class Assembler {
 

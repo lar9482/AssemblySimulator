@@ -1,4 +1,4 @@
-namespace Compiler.Assembler.Tokens;
+namespace Compiler.Assemble.Tokens;
 
 public enum TokenType {
     //General purpose registers

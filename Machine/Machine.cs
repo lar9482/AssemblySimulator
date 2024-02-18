@@ -2,7 +2,7 @@ using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using System.Linq;
 
-namespace Compiler.Machine;
+namespace Compiler.AssemblyMachine;
 
 public class Machine {
 

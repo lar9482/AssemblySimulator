@@ -44,7 +44,7 @@ public class Machine {
             
             // The register program counter will be adjusted if it comes across a main label.
             if (decodedHex.SequenceEqual(MAIN_LABEL)) {
-                regPC = WORD_BYTE_SIZE * i;
+                regPC = startProgramAddress + WORD_BYTE_SIZE * i;
             }
 
             /*
@@ -269,6 +269,17 @@ public class Machine {
                 break;
             case Opcode.jmp:
                 regPC += (inst.largeJumpOffset) << 2;
+                break;
+            case Opcode.jmpL:
+                registers[RegID.rRET] = regPC;
+                regPC += (inst.largeJumpOffset) << 2;
+                break;
+            case Opcode.jmpL_Reg:
+                registers[RegID.rRET] = regPC;
+                regPC = registers[inst.reg1];
+                break;
+            case Opcode.jmpReg:
+                regPC = registers[inst.reg1];
                 break;
             case Opcode.lb:
                 int addressLB = registers[inst.reg2]+inst.smallJumpOffset;

@@ -228,7 +228,7 @@ public class Assembler {
 
         int currentAddress = instSizeByte*place + startProgramAddress;
         int labelAddress = labelAddresses[instruction.label];
-        int jumpOffsetBin = (labelAddress - (currentAddress - 4)) >> 2;
+        int jumpOffsetBin = (labelAddress - currentAddress) >> 2;
 
         //These numbers define the bounds of a number that can fit in 25 binary digits,
         //which is the allocated space for an immmediate number
@@ -284,7 +284,7 @@ public class Assembler {
 
         int currentAddress = instSizeByte*place + startProgramAddress;
         int labelAddress = labelAddresses[instruction.label];
-        int jumpOffsetBin = (labelAddress - (currentAddress - 4)) >> 2;
+        int jumpOffsetBin = (labelAddress - currentAddress) >> 2;
         //These numbers define the bounds of a number that can fit in 15 binary digits,
         //which is the allocated space for an immmediate number
         if (jumpOffsetBin > 32767 || jumpOffsetBin < -32767) {

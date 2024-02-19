@@ -1,12 +1,4 @@
-using System.IO;
-using System.Collections;
-
-using Compiler.Assemble.Tokens;
-using Compiler.Assemble.Lex;
-using Compiler.Assemble.Parse;
-using Compiler.Assemble.Instruction;
-
-namespace Compiler.Assemble;
+namespace Compiler.Runtime;
 
 public class Assembler {
 

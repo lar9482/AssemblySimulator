@@ -1,6 +1,4 @@
-
-
-namespace Compiler.Assemble.Instruction;
+namespace Compiler.Runtime;
 
 public abstract class Inst {
     public string instName { get; }

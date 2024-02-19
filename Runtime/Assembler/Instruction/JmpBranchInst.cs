@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-
-namespace Compiler.Assemble.Instruction;
+namespace Compiler.Runtime;
 
 public class JmpBranchInst : Inst {
     public string reg1 { get; }

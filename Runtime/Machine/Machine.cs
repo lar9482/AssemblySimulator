@@ -1,8 +1,4 @@
-using System.ComponentModel;
-using System.ComponentModel.DataAnnotations;
-using System.Linq;
-
-namespace Compiler.AssemblyMachine;
+namespace Compiler.Runtime;
 
 public class Machine {
 

@@ -1,4 +1,4 @@
-namespace Compiler.Assemble.Tokens;
+namespace Compiler.Runtime;
 
 public struct Token {
     public string lexeme  { get; }

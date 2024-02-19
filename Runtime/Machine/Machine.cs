@@ -65,6 +65,10 @@ public class Machine {
         }
     }
 
+    public int[] dumpRegisters() {
+        return registers;
+    }
+
     private byte[] fetchInstruction() {
         byte[] instruction = new byte[4];
         instruction[0] = RAM[regPC];

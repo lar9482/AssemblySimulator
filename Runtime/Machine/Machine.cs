@@ -312,10 +312,32 @@ public class Machine {
                 RAM[addressSW+3] = reg1BytesSW[3];
                 break;
             case Opcode.interrupt:
+                resolveInterrupt(inst);
+                break;
             case Opcode.label:
                 break;
             default:
                 throw new Exception(String.Format("Unrecognized opcode {0}", inst.opcode));
+        }
+    }
+
+    private void resolveInterrupt(DecodedInst inst) {
+        int interruptCommand = inst.reg1;
+        int reg = inst.reg2;
+
+        switch (interruptCommand) {
+            case InterruptCommand.halt:
+                break;
+            case InterruptCommand.printw_int:
+                Console.WriteLine(registers[reg]);
+                break;
+            case InterruptCommand.printw_hex:
+                Console.WriteLine(registers[reg].ToString("X8"));
+                break;
+            case InterruptCommand.printw_bin:
+                string binary = Convert.ToString(registers[reg], 2).PadLeft(32, '0');
+                Console.WriteLine(binary);
+                break;
         }
     }
 
@@ -400,6 +422,14 @@ public class Machine {
         public const int interrupt = 32;
         public const int label = 33;
         public Opcode() {}
+    }
+
+    private struct InterruptCommand {
+        public const int halt = 0;
+        public const int printw_int = 1; 
+        public const int printw_hex = 2; 
+        public const int printw_bin = 3; 
+        public InterruptCommand() {}
     }
 
     private struct DecodedInst {

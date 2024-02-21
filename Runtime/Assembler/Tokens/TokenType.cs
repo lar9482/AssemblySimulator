@@ -68,8 +68,12 @@ public enum TokenType {
     sb_Inst,
     sw_Inst,
 
-    //Control instructions
+    //Interrupt instructions
     halt_Inst,
+    printw_Int_Inst,
+    printw_Hex_Inst,
+    printw_Bin_Inst,
+    //Other stuff
     identifier,
     integer,
 

@@ -1,8 +1,8 @@
 ﻿using Compiler.Runtime;
 
 int startProgramAddress = 0;
-string assemblyFilePath = "./AssemblyTests/jumpLink.asm";
-string binFilePath = "./AssemblyTests/Output/jumpLink.out";
+string assemblyFilePath = "./AssemblyTests/printInst.asm";
+string binFilePath = "./AssemblyTests/Output/printInst.out";
 
 Assembler assembler = new Assembler(startProgramAddress);
 assembler.assembleFile(assemblyFilePath, binFilePath);

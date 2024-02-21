@@ -15,3 +15,4 @@ main:
     bNe r1, r2, notEqual
 
 exit:
+

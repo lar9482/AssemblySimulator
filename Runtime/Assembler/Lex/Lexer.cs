@@ -213,6 +213,12 @@ public class Lexer {
                 return new Token(lexeme, lineCounter, TokenType.sw_Inst);
             case "halt":
                 return new Token(lexeme, lineCounter, TokenType.halt_Inst);
+            case "printw_int": 
+                return new Token(lexeme, lineCounter, TokenType.printw_Int_Inst);
+            case "printw_hex": 
+                return new Token(lexeme, lineCounter, TokenType.printw_Hex_Inst);
+            case "printw_bin": 
+                return new Token(lexeme, lineCounter, TokenType.printw_Bin_Inst);
             default:
                 return new Token(lexeme, lineCounter, TokenType.identifier);
         }

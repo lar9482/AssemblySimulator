@@ -78,6 +78,13 @@ public class Assembler {
                         )
                     );
                     break;
+                case "InterruptRegInst":
+                    assembledInstructions.Add(
+                        assembleInterruptRegInst(
+                            (InterruptRegInst) instruction
+                        )
+                    );
+                    break;
                 default:
                     throw new Exception("Unexpected instruction seen");
             }
@@ -305,7 +312,7 @@ public class Assembler {
      * oooooocc ccc00000 00000000 00000000
      *
      * o: opcode binary
-     * s: command binary
+     * c: command binary
      * 0: placeholder zeros
      */
     private string assembleInterruptInst(InterruptInst instruction) {
@@ -315,6 +322,27 @@ public class Assembler {
         int bin = opcodeBin << 26;
         bin += commandBin << 21;
         
+        return bin.ToString("X8");
+    }
+
+    /*
+     * Target format:
+     * oooooocc cccsssss 00000000 00000000
+     *
+     * o: opcode binary
+     * c: command binary
+     * s: register binary
+     * 0: placeholder zeros
+     */
+    private string assembleInterruptRegInst(InterruptRegInst instruction) {
+        int opcodeBin = assembleOpcode(instruction.instName);
+        int commandBin = assembleInterruptCommand(instruction.command);
+        int regBin = assembleRegister(instruction.reg);
+        
+        int bin = opcodeBin << 26;
+        bin += commandBin << 21;
+        bin += regBin << 16;
+
         return bin.ToString("X8");
     }
 
@@ -415,6 +443,12 @@ public class Assembler {
         switch(command) {
             case "halt":
                 return 0;
+            case "printw_int": 
+                return 1;
+            case "printw_hex": 
+                return 2;
+            case "printw_bin": 
+                return 3;
             default:
                 throw new Exception("Unrecognized interrupt command");
         }

@@ -1,3 +1,5 @@
+using System.Runtime.CompilerServices;
+
 namespace Compiler.Runtime;
 
 public class Parser {
@@ -60,6 +62,11 @@ public class Parser {
                 break;
             case TokenType.halt_Inst:
                 instructions.Add(parseInterruptInst());
+                break;
+            case TokenType.printw_Int_Inst:
+            case TokenType.printw_Hex_Inst:
+            case TokenType.printw_Bin_Inst:
+                instructions.Add(parseInterruptRegInst());
                 break;
             case TokenType.EOF:
                 return instructions;
@@ -165,6 +172,17 @@ public class Parser {
 
         return new InterruptInst(
             commandToken.lexeme,
+            "interrupt"
+        );
+    }
+
+    private InterruptRegInst parseInterruptRegInst() {
+        Token commandToken = consume(tokenQueue.Peek().type);
+        Token regToken = parseRegister();
+
+        return new InterruptRegInst(
+            commandToken.lexeme,
+            regToken.lexeme,
             "interrupt"
         );
     }

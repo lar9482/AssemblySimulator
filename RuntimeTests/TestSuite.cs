@@ -7,29 +7,6 @@ public class Tests {
     private Assembler assembler;
     private Machine machine;
 
-    private int rZERO = 0;
-    private int r1 = 1;
-    private int r2 = 2;
-    private int r3 = 3;
-    private int r4 = 4;
-    private int r5 = 5;
-    private int r6 = 6;
-    private int r7 = 7;
-    private int r8 = 8;
-    private int r9 = 9;
-    private int r10 = 10;
-    private int r11 = 11;
-    private int r12 = 12;
-    private int r13 = 13;
-    private int r14 = 14;
-    private int r15 = 15;
-    private int r16 = 16;
-    private int rSP = 17;
-    private int rFP = 18;
-    private int rRET = 19;
-    private int rHI = 20;
-    private int rLO = 21;
-
     [SetUp]
     public void Setup() {
         int startProgramAddress = 0;
@@ -46,7 +23,7 @@ public class Tests {
         machine.loadProgram(binFilePath);
         machine.runProgram();
 
-        int[] registers = machine.dumpRegisters();
+        Dictionary<RegID, int> registers = machine.dumpRegisters();
         int expectedR1 = 1000;
         int expectedR2 = 1000;
         int expectedR3 = 1000;
@@ -62,20 +39,20 @@ public class Tests {
         int expectedRHI = 2;
         int expectedRLO = 500;
 #pragma warning disable NUnit2005 // Consider using Assert.That(actual, Is.EqualTo(expected)) instead of Assert.AreEqual(expected, actual)
-        Assert.AreEqual(expectedR1, registers[r1]);
-        Assert.AreEqual(expectedR2, registers[r2]);
-        Assert.AreEqual(expectedR3, registers[r3]);
-        Assert.AreEqual(expectedR4, registers[r4]);
-        Assert.AreEqual(expectedR5, registers[r5]);
-        Assert.AreEqual(expectedR6, registers[r6]);
-        Assert.AreEqual(expectedR7, registers[r7]);
-        Assert.AreEqual(expectedR8, registers[r8]);
-        Assert.AreEqual(expectedR9, registers[r9]);
-        Assert.AreEqual(expectedR10, registers[r10]);
-        Assert.AreEqual(expectedR11, registers[r11]);
-        Assert.AreEqual(expectedR12, registers[r12]);
-        Assert.AreEqual(expectedRHI, registers[rHI]);
-        Assert.AreEqual(expectedRLO, registers[rLO]);
+        Assert.AreEqual(expectedR1, registers[RegID.r1]);
+        Assert.AreEqual(expectedR2, registers[RegID.r2]);
+        Assert.AreEqual(expectedR3, registers[RegID.r3]);
+        Assert.AreEqual(expectedR4, registers[RegID.r4]);
+        Assert.AreEqual(expectedR5, registers[RegID.r5]);
+        Assert.AreEqual(expectedR6, registers[RegID.r6]);
+        Assert.AreEqual(expectedR7, registers[RegID.r7]);
+        Assert.AreEqual(expectedR8, registers[RegID.r8]);
+        Assert.AreEqual(expectedR9, registers[RegID.r9]);
+        Assert.AreEqual(expectedR10, registers[RegID.r10]);
+        Assert.AreEqual(expectedR11, registers[RegID.r11]);
+        Assert.AreEqual(expectedR12, registers[RegID.r12]);
+        Assert.AreEqual(expectedRHI, registers[RegID.rHI]);
+        Assert.AreEqual(expectedRLO, registers[RegID.rLO]);
     }
 
     [Test]
@@ -87,7 +64,7 @@ public class Tests {
         machine.loadProgram(binFilePath);
         machine.runProgram();
 
-        int[] registers = machine.dumpRegisters();
+        Dictionary<RegID, int> registers = machine.dumpRegisters();
         int expectedR1 = 900;
         int expectedR6 = 480;
         int expectedR7 = 1020;
@@ -97,14 +74,14 @@ public class Tests {
         int expectedRHI = 1800;
         int expectedRLO = 1800;
 
-        Assert.AreEqual(expectedR1, registers[r1]);
-        Assert.AreEqual(expectedR6, registers[r6]);
-        Assert.AreEqual(expectedR7, registers[r7]);
-        Assert.AreEqual(expectedR8, registers[r8]);
-        Assert.AreEqual(expectedR10, registers[r10]);
-        Assert.AreEqual(expectedR11, registers[r11]);
-        Assert.AreEqual(expectedRHI, registers[rHI]);
-        Assert.AreEqual(expectedRLO, registers[rLO]);
+        Assert.AreEqual(expectedR1, registers[RegID.r1]);
+        Assert.AreEqual(expectedR6, registers[RegID.r6]);
+        Assert.AreEqual(expectedR7, registers[RegID.r7]);
+        Assert.AreEqual(expectedR8, registers[RegID.r8]);
+        Assert.AreEqual(expectedR10, registers[RegID.r10]);
+        Assert.AreEqual(expectedR11, registers[RegID.r11]);
+        Assert.AreEqual(expectedRHI, registers[RegID.rHI]);
+        Assert.AreEqual(expectedRLO, registers[RegID.rLO]);
     }
 
     [Test]
@@ -116,7 +93,7 @@ public class Tests {
         machine.loadProgram(binFilePath);
         machine.runProgram();
 
-        int[] registers = machine.dumpRegisters();
+        Dictionary<RegID, int> registers = machine.dumpRegisters();
 
         // These registers were simply used to hold locations in memory
         int expectedR2 = 2000;
@@ -138,20 +115,20 @@ public class Tests {
         int expectedR13 = 255;
         int expectedR14 = 255;
 
-        Assert.AreEqual(expectedR1, registers[r1]);
-        Assert.AreEqual(expectedR2, registers[r2]);
-        Assert.AreEqual(expectedR3, registers[r3]);
-        Assert.AreEqual(expectedR4, registers[r4]);
-        Assert.AreEqual(expectedR5, registers[r5]);
-        Assert.AreEqual(expectedR6, registers[r6]);
-        Assert.AreEqual(expectedR7, registers[r7]);
-        Assert.AreEqual(expectedR8, registers[r8]);
-        Assert.AreEqual(expectedR9, registers[r9]);
-        Assert.AreEqual(expectedR10, registers[r10]);
-        Assert.AreEqual(expectedR11, registers[r11]);
-        Assert.AreEqual(expectedR12, registers[r12]);
-        Assert.AreEqual(expectedR13, registers[r13]);
-        Assert.AreEqual(expectedR14, registers[r14]);
+        Assert.AreEqual(expectedR1, registers[RegID.r1]);
+        Assert.AreEqual(expectedR2, registers[RegID.r2]);
+        Assert.AreEqual(expectedR3, registers[RegID.r3]);
+        Assert.AreEqual(expectedR4, registers[RegID.r4]);
+        Assert.AreEqual(expectedR5, registers[RegID.r5]);
+        Assert.AreEqual(expectedR6, registers[RegID.r6]);
+        Assert.AreEqual(expectedR7, registers[RegID.r7]);
+        Assert.AreEqual(expectedR8, registers[RegID.r8]);
+        Assert.AreEqual(expectedR9, registers[RegID.r9]);
+        Assert.AreEqual(expectedR10, registers[RegID.r10]);
+        Assert.AreEqual(expectedR11, registers[RegID.r11]);
+        Assert.AreEqual(expectedR12, registers[RegID.r12]);
+        Assert.AreEqual(expectedR13, registers[RegID.r13]);
+        Assert.AreEqual(expectedR14, registers[RegID.r14]);
     }
 
     [Test]
@@ -163,17 +140,17 @@ public class Tests {
         machine.loadProgram(binFilePath);
         machine.runProgram();
 
-        int[] registers = machine.dumpRegisters();
+        Dictionary<RegID, int> registers = machine.dumpRegisters();
 
         int expectedR1 = 100;
         int expectedR2 = 100;
         int expectedR3 = 300;
         int expectedR4 = 400;
 
-        Assert.AreEqual(expectedR1, registers[r1]);
-        Assert.AreEqual(expectedR2, registers[r2]);
-        Assert.AreEqual(expectedR3, registers[r3]);
-        Assert.AreEqual(expectedR4, registers[r4]);
+        Assert.AreEqual(expectedR1, registers[RegID.r1]);
+        Assert.AreEqual(expectedR2, registers[RegID.r2]);
+        Assert.AreEqual(expectedR3, registers[RegID.r3]);
+        Assert.AreEqual(expectedR4, registers[RegID.r4]);
     }
 
     [Test]
@@ -185,7 +162,7 @@ public class Tests {
         machine.loadProgram(binFilePath);
         machine.runProgram();
 
-        int[] registers = machine.dumpRegisters();
+        Dictionary<RegID, int> registers = machine.dumpRegisters();
 
         int expectedR1 = 10;
         int expectedR2 = 20;
@@ -194,12 +171,12 @@ public class Tests {
         int expectedR11 = 2000;
         int expectedR12 = 3000;
 
-        Assert.AreEqual(expectedR1, registers[r1]);
-        Assert.AreEqual(expectedR2, registers[r2]);
-        Assert.AreEqual(expectedR3, registers[r3]);
-        Assert.AreEqual(expectedR10, registers[r10]);
-        Assert.AreEqual(expectedR11, registers[r11]);
-        Assert.AreEqual(expectedR12, registers[r12]);
+        Assert.AreEqual(expectedR1, registers[RegID.r1]);
+        Assert.AreEqual(expectedR2, registers[RegID.r2]);
+        Assert.AreEqual(expectedR3, registers[RegID.r3]);
+        Assert.AreEqual(expectedR10, registers[RegID.r10]);
+        Assert.AreEqual(expectedR11, registers[RegID.r11]);
+        Assert.AreEqual(expectedR12, registers[RegID.r12]);
     }
 }
 #pragma warning restore NUnit2005 // Consider using Assert.That(actual, Is.EqualTo(expected)) instead of Assert.AreEqual(expected, actual)

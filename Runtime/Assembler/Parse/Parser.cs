@@ -207,8 +207,7 @@ public class Parser {
             case TokenType.r15_Reg:
             case TokenType.r16_Reg:
             case TokenType.rSP_Reg:
-            case TokenType.rFP_Reg:
-            case TokenType.rPC_Reg:    
+            case TokenType.rFP_Reg: 
             case TokenType.rRET_Reg:
             case TokenType.rHI_Reg: 
             case TokenType.rLO_Reg: 

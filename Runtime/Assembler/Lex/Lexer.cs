@@ -139,8 +139,6 @@ public class Lexer {
                 return new Token(lexeme, lineCounter, TokenType.rSP_Reg); 
             case "rFP":
                 return new Token(lexeme, lineCounter, TokenType.rFP_Reg);   
-            case "rPC":
-                return new Token(lexeme, lineCounter, TokenType.rPC_Reg); 
             case "rRET":
                 return new Token(lexeme, lineCounter, TokenType.rRET_Reg); 
             case "rHI":

@@ -5,7 +5,8 @@ public class Machine {
     public Machine(int startProgramAddress) {
         this.startProgramAddress = startProgramAddress;
         this.RAM = new byte[MEMORY_SIZE];
-        this.registers = new int[typeof(RegID).GetFields().Length];
+        this.registers = new Dictionary<RegID, int>();
+        // this.registers = new int[typeof(RegID).GetFields().Length];
 
         registers[RegID.rZERO] = 0;
         registers[RegID.r1] = 0;
@@ -65,7 +66,7 @@ public class Machine {
         }
     }
 
-    public int[] dumpRegisters() {
+    public Dictionary<RegID, int> dumpRegisters() {
         return registers;
     }
 
@@ -189,81 +190,84 @@ public class Machine {
     }
 
     private void executeInstruction(DecodedInst inst) {
-        switch (inst.opcode) {
+        Opcode opcode = (Opcode) inst.opcode;
+        RegID reg1 = (RegID) inst.reg1;
+        RegID reg2 = (RegID) inst.reg2;
+        switch (opcode) {
             case Opcode.mov:
-                registers[inst.reg1] = registers[inst.reg2];
+                registers[reg1] = registers[reg2];
                 break;
             case Opcode.add:
-                registers[inst.reg1] += registers[inst.reg2];
+                registers[reg1] += registers[reg2];
                 break;
             case Opcode.sub:
-                registers[inst.reg1] -= registers[inst.reg2];
+                registers[reg1] -= registers[reg2];
                 break;
             case Opcode.mult:
-                registers[RegID.rHI] = registers[inst.reg1] * registers[inst.reg2];
-                registers[RegID.rLO] = registers[inst.reg1] * registers[inst.reg2];
+                registers[RegID.rHI] = registers[reg1] * registers[reg2];
+                registers[RegID.rLO] = registers[reg1] * registers[reg2];
                 break;
             case Opcode.div:
-                registers[RegID.rHI] = (int) registers[inst.reg1] / registers[inst.reg2];
-                registers[RegID.rLO] = registers[inst.reg1] % registers[inst.reg2];
+                registers[RegID.rHI] = (int) registers[reg1] / registers[reg2];
+                registers[RegID.rLO] = registers[reg1] % registers[reg2];
                 break;
             case Opcode.and:
-                registers[inst.reg1] = registers[inst.reg1] & registers[inst.reg2];
+                registers[reg1] = registers[reg1] & registers[reg2];
                 break;
             case Opcode.or:
-                registers[inst.reg1] = registers[inst.reg1] | registers[inst.reg2];
+                registers[reg1] = registers[reg1] | registers[reg2];
                 break;
             case Opcode.xor:
-                registers[inst.reg1] = registers[inst.reg1] ^ registers[inst.reg2];
+                registers[reg1] = registers[reg1] ^ registers[reg2];
                 break;
             case Opcode.nor:
-                registers[inst.reg1] = ~(registers[inst.reg1] | registers[inst.reg2]);
+                registers[reg1] = ~(registers[reg1] | registers[reg2]);
                 break;
             case Opcode.sllv:
-                registers[inst.reg1] = registers[inst.reg1] << registers[inst.reg2];
+                registers[reg1] = registers[reg1] << registers[reg2];
                 break;
             case Opcode.srav:
-                registers[inst.reg1] = registers[inst.reg1] >> registers[inst.reg2];
+                registers[reg1] = registers[reg1] >> registers[reg2];
                 break;
             case Opcode.movI:
-                registers[inst.reg1] = inst.imm;
+                registers[reg1] = inst.imm;
                 break;
             case Opcode.addI:
-                registers[inst.reg1] += inst.imm;
+                registers[reg1] += inst.imm;
                 break;
             case Opcode.subI:
-                registers[inst.reg1] -= inst.imm;
+                registers[reg1] -= inst.imm;
                 break;
             case Opcode.multI:
-                registers[RegID.rHI] = registers[inst.reg1] * inst.imm;
-                registers[RegID.rLO] = registers[inst.reg1] * inst.imm;
+                registers[RegID.rHI] = registers[reg1] * inst.imm;
+                registers[RegID.rLO] = registers[reg1] * inst.imm;
                 break;
             case Opcode.divI:
-                registers[RegID.rHI] = (int) registers[inst.reg1] / inst.imm;
-                registers[RegID.rLO] = registers[inst.reg1] % inst.imm;
+                registers[RegID.rHI] = (int) registers[reg1] / inst.imm;
+                registers[RegID.rLO] = registers[reg1] % inst.imm;
                 break;
             case Opcode.andI:
-                registers[inst.reg1] = registers[inst.reg1] & inst.imm;
+                registers[reg1] = registers[reg1] & inst.imm;
                 break;
             case Opcode.orI:
-                registers[inst.reg1] = registers[inst.reg1] | inst.imm;
+                registers[reg1] = registers[reg1] | inst.imm;
                 break;
             case Opcode.xorI:
-                registers[inst.reg1] = registers[inst.reg1] ^ inst.imm;
+                registers[reg1] = registers[reg1] ^ inst.imm;
                 break;
             case Opcode.sll:
-                registers[inst.reg1] = registers[inst.reg1] << inst.imm;
+                registers[reg1] = registers[reg1] << inst.imm;
                 break;
             case Opcode.sra:
-                registers[inst.reg1] = registers[inst.reg1] >> inst.imm;
+                registers[reg1] = registers[reg1] >> inst.imm;
                 break;
             case Opcode.bEq:
-                if (registers[inst.reg1] == registers[inst.reg2]) {
+                if (registers[reg1] == registers[reg2]) {
                     regPC += (inst.smallJumpOffset) << 2;
                 }
                 break;
             case Opcode.bNe:
-                if (registers[inst.reg1] != registers[inst.reg2]) {
+                if (registers[reg1] != registers[reg2]) {
                     regPC += (inst.smallJumpOffset) << 2;
                 }
                 break;
@@ -276,36 +280,36 @@ public class Machine {
                 break;
             case Opcode.jmpL_Reg:
                 registers[RegID.rRET] = regPC;
-                regPC = registers[inst.reg1];
+                regPC = registers[reg1];
                 break;
             case Opcode.jmpReg:
-                regPC = registers[inst.reg1];
+                regPC = registers[reg1];
                 break;
             case Opcode.lb:
-                int addressLB = registers[inst.reg2]+inst.smallJumpOffset;
+                int addressLB = registers[reg2]+inst.smallJumpOffset;
                 byte memByteLB = RAM[addressLB];
-                registers[inst.reg1] = memByteLB;
+                registers[reg1] = memByteLB;
                 break;
             case Opcode.lw:
-                int addressLW = registers[inst.reg2]+inst.smallJumpOffset;
+                int addressLW = registers[reg2]+inst.smallJumpOffset;
                 byte[] memWordLW = new byte[] {
                     RAM[addressLW],
                     RAM[addressLW+1],
                     RAM[addressLW+2],
                     RAM[addressLW+3]
                 };
-                registers[inst.reg1] = BitConverter.ToInt32(memWordLW, 0);
+                registers[reg1] = BitConverter.ToInt32(memWordLW, 0);
                 break;
             case Opcode.sb:
-                byte[] reg1BytesSB = BitConverter.GetBytes(registers[inst.reg1]);
+                byte[] reg1BytesSB = BitConverter.GetBytes(registers[reg1]);
                 byte leastSignByteSB = reg1BytesSB[0];
 
-                int addressSB = registers[inst.reg2]+inst.smallJumpOffset;
+                int addressSB = registers[reg2]+inst.smallJumpOffset;
                 RAM[addressSB] = leastSignByteSB;
                 break;
             case Opcode.sw:
-                byte[] reg1BytesSW = BitConverter.GetBytes(registers[inst.reg1]);
-                int addressSW = registers[inst.reg2]+inst.smallJumpOffset;
+                byte[] reg1BytesSW = BitConverter.GetBytes(registers[reg1]);
+                int addressSW = registers[reg2]+inst.smallJumpOffset;
                 RAM[addressSW] = reg1BytesSW[0];
                 RAM[addressSW+1] = reg1BytesSW[1];
                 RAM[addressSW+2] = reg1BytesSW[2];
@@ -322,10 +326,10 @@ public class Machine {
     }
 
     private void resolveInterrupt(DecodedInst inst) {
-        int interruptCommand = inst.reg1;
-        int reg = inst.reg2;
+        InterruptCommand command = (InterruptCommand) inst.reg1;
+        RegID reg = (RegID) inst.reg2;
 
-        switch (interruptCommand) {
+        switch (command) {
             case InterruptCommand.halt:
                 break;
             case InterruptCommand.printw_int:
@@ -349,88 +353,7 @@ public class Machine {
     private int startProgramAddress; 
     private byte[] RAM;
     private int regPC = 0;
-    private int[] registers;
-    
-
-    /**
-     * NOTE: The order/assignments of RegID and Opcode are important 
-     * because they match with the instruction encodings.
-     *
-     * This will allow the machine to do clean pattern matching when referencing the 
-     * registers and opcodes.
-     * 
-     */
-    private struct RegID {
-        public const int rZERO = 0;
-        public const int r1 = 1;
-        public const int r2 = 2;
-        public const int r3 = 3;
-        public const int r4 = 4;
-        public const int r5 = 5;
-        public const int r6 = 6;
-        public const int r7 = 7;
-        public const int r8 = 8;
-        public const int r9 = 9;
-        public const int r10 = 10;
-        public const int r11 = 11;
-        public const int r12 = 12;
-        public const int r13 = 13;
-        public const int r14 = 14;
-        public const int r15 = 15;
-        public const int r16 = 16;
-        public const int rSP = 17;
-        public const int rFP = 18;
-        public const int rRET = 19;
-        public const int rHI = 20;
-        public const int rLO = 21;
-        public RegID() {}
-    }
-
-    private struct Opcode {
-        public const int mov = 0;
-        public const int add = 1;
-        public const int sub = 2;
-        public const int mult = 3;
-        public const int div = 4;
-        public const int and = 5;
-        public const int or = 6;
-        public const int xor = 7;
-        public const int not = 8;
-        public const int nor = 9;
-        public const int sllv = 10;
-        public const int srav = 11;
-        public const int movI = 12;
-        public const int addI = 13;
-        public const int subI = 14;
-        public const int multI = 15;
-        public const int divI = 16;
-        public const int andI = 17;
-        public const int orI = 18;
-        public const int xorI = 19;
-        public const int sll = 20;
-        public const int sra = 21;
-        public const int bEq = 22;
-        public const int bNe = 23;
-        public const int jmp = 24;
-        public const int jmpL = 25;
-        public const int jmpL_Reg = 26;
-        public const int jmpReg = 27;
-        public const int lb = 28;
-        public const int lw = 29;
-        public const int sb = 30;
-        public const int sw = 31;
-        public const int interrupt = 32;
-        public const int label = 33;
-        public Opcode() {}
-    }
-
-    private struct InterruptCommand {
-        public const int halt = 0;
-        public const int printw_int = 1; 
-        public const int printw_hex = 2; 
-        public const int printw_bin = 3; 
-        public InterruptCommand() {}
-    }
+    private Dictionary<RegID, int> registers;
 
     private struct DecodedInst {
         public int opcode;

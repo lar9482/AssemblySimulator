@@ -21,7 +21,6 @@ public enum TokenType {
     r16_Reg,
     rSP_Reg, //Stack pointer register
     rFP_Reg, //Frame pointer register 
-    rPC_Reg, //Program counter register    
     rRET_Reg, //Return pointer register
     rHI_Reg, //Holds truncated result from division
     rLO_Reg, //Holds remainder from truncated result

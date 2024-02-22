@@ -370,29 +370,28 @@ public class Assembler {
 
     private int assembleRegister(string register) {
         switch (register) {
-            case "rZERO": return 0;
-            case "r1": return 1;
-            case "r2": return 2;
-            case "r3": return 3;
-            case "r4": return 4;
-            case "r5": return 5;
-            case "r6": return 6;
-            case "r7": return 7;
-            case "r8": return 8;
-            case "r9": return 9;
-            case "r10": return 10;
-            case "r11": return 11;
-            case "r12": return 12;
-            case "r13": return 13;
-            case "r14": return 14;
-            case "r15": return 15;
-            case "r16": return 16;
-            case "rSP": return 17;
-            case "rFP": return 18;
-            case "rRET": return 19;
-            case "rHI":  return 20;
-            case "rLO": return 21;
-            case "rPC": return 22;  
+            case "rZERO":return (int) RegID.rZERO;
+            case "r1":return (int) RegID.r1;
+            case "r2":return (int) RegID.r2;
+            case "r3":return (int) RegID.r3;
+            case "r4":return (int) RegID.r4;
+            case "r5":return (int) RegID.r5;
+            case "r6":return (int) RegID.r6;
+            case "r7":return (int) RegID.r7;
+            case "r8":return (int) RegID.r8;
+            case "r9":return (int) RegID.r9;
+            case "r10": return (int) RegID.r10;
+            case "r11": return (int) RegID.r11;
+            case "r12": return (int) RegID.r12;
+            case "r13": return (int) RegID.r13;
+            case "r14": return (int) RegID.r14;
+            case "r15": return (int) RegID.r15;
+            case "r16": return (int) RegID.r16;
+            case "rSP": return (int) RegID.rSP;
+            case "rFP": return (int) RegID.rFP;
+            case "rRET": return (int) RegID.rRET;
+            case "rHI":  return (int) RegID.rHI;
+            case "rLO": return (int) RegID.rLO;
             default:
                 throw new Exception(String.Format("{0} is not a valid register", register));
         }
@@ -400,40 +399,40 @@ public class Assembler {
 
     private int assembleOpcode(string opcode) {
         switch(opcode) {
-            case "mov": return 0;
-            case "add": return 1;
-            case "sub": return 2;
-            case "mult": return 3;
-            case "div": return 4;
-            case "and": return 5;
-            case "or": return 6;
-            case "xor": return 7;
-            case "not": return 8;
-            case "nor": return 9;
-            case "sllv": return 10;
-            case "srav": return 11;
-            case "movI": return 12;
-            case "addI": return 13;
-            case "subI": return 14;
-            case "multI": return 15;
-            case "divI": return 16;
-            case "andI": return 17;
-            case "orI": return 18;
-            case "xorI": return 19;
-            case "sll": return 20;
-            case "sra": return 21;
-            case "bEq":  return 22;
-            case "bNe": return 23;
-            case "jmp": return 24;
-            case "jmpL": return 25;
-            case "jmpL_Reg": return 26;
-            case "jmpReg": return 27;
-            case "lb": return 28;
-            case "lw": return 29;
-            case "sb": return 30;
-            case "sw": return 31;
-            case "interrupt": return 32;
-            case "label": return 33;
+            case "mov": return (int) Opcode.mov; 
+            case "add": return (int) Opcode.add; 
+            case "sub": return (int) Opcode.sub; 
+            case "mult": return (int) Opcode.mult; 
+            case "div": return (int) Opcode.div; 
+            case "and": return (int) Opcode.and; 
+            case "or": return (int) Opcode.or;
+            case "xor": return (int) Opcode.xor; 
+            case "not": return (int) Opcode.not; 
+            case "nor": return (int) Opcode.nor; 
+            case "sllv": return (int) Opcode.sllv; 
+            case "srav": return (int) Opcode.srav; 
+            case "movI": return (int) Opcode.movI; 
+            case "addI": return (int) Opcode.addI; 
+            case "subI": return (int) Opcode.subI; 
+            case "multI": return (int) Opcode.multI; 
+            case "divI": return (int) Opcode.divI; 
+            case "andI": return (int) Opcode.andI; 
+            case "orI": return (int) Opcode.orI; 
+            case "xorI": return (int) Opcode.xorI; 
+            case "sll": return (int) Opcode.sll; 
+            case "sra": return (int) Opcode.sra; 
+            case "bEq": return (int) Opcode.bEq; 
+            case "bNe": return (int) Opcode.bNe; 
+            case "jmp": return (int) Opcode.jmp; 
+            case "jmpL": return (int) Opcode.jmpL; 
+            case "jmpL_Reg": return (int) Opcode.jmpL_Reg; 
+            case "jmpReg": return (int) Opcode.jmpReg; 
+            case "lb": return (int) Opcode.lb; 
+            case "lw": return (int) Opcode.lw; 
+            case "sb": return (int) Opcode.sb; 
+            case "sw": return (int) Opcode.sw; 
+            case "interrupt": return (int) Opcode.interrupt; 
+            case "label": return (int) Opcode.label; 
             default:
                 throw new Exception(String.Format("{0} is not a valid opcode", opcode));
         }
@@ -441,14 +440,10 @@ public class Assembler {
 
     private int assembleInterruptCommand(string command) {
         switch(command) {
-            case "halt":
-                return 0;
-            case "printw_int": 
-                return 1;
-            case "printw_hex": 
-                return 2;
-            case "printw_bin": 
-                return 3;
+            case "halt": return (int) InterruptCommand.halt;
+            case "printw_int": return (int) InterruptCommand.printw_int;
+            case "printw_hex": return (int) InterruptCommand.printw_hex;
+            case "printw_bin": return (int) InterruptCommand.printw_bin;
             default:
                 throw new Exception("Unrecognized interrupt command");
         }

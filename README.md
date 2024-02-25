@@ -2,7 +2,7 @@
 This is a simple emulator for a RISC-like assembly language. 
 
 # Dependencies
- # Language:
+ ##  Language:
    - C#
  ## Frameworks:
    - Microsoft.NETCore.App (v. 8.0.0)

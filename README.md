@@ -29,7 +29,7 @@ This is a simple emulator for a RISC-like assembly language.
      For example, to run sampleProgram.asm, change assemblyFilePath to './sampleProgram.asm' and binFilePath to './sampleProgram.out'
    ```
 4. Run the command `dotnet build`
-5. Run the command `dotnet run --project './Runtime/Runtime.csproj`
+5. Run the command `dotnet run --project './Runtime/Runtime.csproj'`
 
 # Example Program(sampleProgram.asm)
 ```

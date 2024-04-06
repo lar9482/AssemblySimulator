@@ -8,7 +8,7 @@
             "name": "Debug Runtime",
             "type": "coreclr",
             "request": "launch",
-            "preLaunchTask": "build",
+            "preLaunchTask": "buildSimulator",
             // If you have changed target frameworks, make sure to update the program path.
             "program": "${workspaceFolder}/Runtime/bin/Debug/net8.0/Runtime.dll",
             "args": [],
